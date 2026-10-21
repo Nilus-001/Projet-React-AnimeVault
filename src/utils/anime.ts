@@ -31,3 +31,35 @@ export function airsOn(anime: Pick<Anime, "broadcast">, weekday: string): boolea
 export function joinNames(refs: NamedRef[], separator = ", "): string {
     return refs.map((ref) => ref.name).join(separator);
 }
+
+const MONTH_YEAR_FR = new Intl.DateTimeFormat("fr-FR", { month: "short", year: "numeric" });
+
+function formatMonthYear(iso: string | null): string | null {
+    if (!iso) return null;
+    const date = new Date(iso);
+    return Number.isNaN(date.getTime()) ? null : MONTH_YEAR_FR.format(date);
+}
+
+export function formatAiredRange(aired: Anime["aired"]): string | null {
+    const from = formatMonthYear(aired.from);
+    const to = formatMonthYear(aired.to);
+    if (from && to) return from === to ? from : `${from} – ${to}`;
+    if (from) return `Depuis ${from}`;
+    return aired.label;
+}
+
+export function formatRatingShort(rating: Anime["rating"]): string | null {
+    if (!rating) return null;
+    return rating.split(" - ")[0].trim() || null;
+}
+
+export function formatEpisodes(episodes: Anime["episodes"]): string | null {
+    if (episodes === null) return null;
+    return `${episodes} ${episodes > 1 ? "épisodes" : "épisode"}`;
+}
+
+export const STATUS_LABEL_FR: Record<AnimeStatus, string> = {
+    "Finished Airing": "Terminé",
+    "Currently Airing": "En cours",
+    "Not yet aired": "À venir",
+};

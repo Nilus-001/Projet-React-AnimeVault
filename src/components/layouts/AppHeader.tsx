@@ -7,9 +7,9 @@ import PageContainer from "../cores/container/PageContainer.tsx";
 const NAV_ITEMS: NavItem[] = [
     { key: "home", label: "Home", href: "/" },
     { key: "catalogue", label: "Catalogue", href: "/catalogue" },
-    { key: "seasonal", label: "Seasonal & Airing", href: "/seasonal" },
-    { key: "detail", label: "Anime Detail", href: "/anime" },
-    { key: "vault", label: "My Vault", href: "/vault" },
+    // { key: "seasonal", label: "Seasonal & Airing", href: "/seasonal" },
+    // { key: "detail", label: "Anime Detail", href: "/anime" },
+    // { key: "vault", label: "My Vault", href: "/vault" },
 ];
 
 const MOBILE_NAV_ID = "mobile-navigation";
