@@ -7,7 +7,8 @@ import CatalogueResultGrid from "../../components/features/catalogue/CatalogueRe
 import { MOCK_ANIME } from "../../mocks/anime.ts";
 import type { Anime } from "../../types/anime.ts";
 
-/** Local title filter on mocks — will be replaced by a Jikan `/anime?q=` call. */
+//! ------------------------------ MOCK -----------------------------------------
+
 function filterByTitle(list: Anime[], query: string): Anime[] {
     const q = query.trim().toLowerCase();
     if (!q) return list;
@@ -15,12 +16,17 @@ function filterByTitle(list: Anime[], query: string): Anime[] {
         [anime.title, anime.titleEnglish, anime.titleJapanese].some((t) => t?.toLowerCase().includes(q)),
     );
 }
+//! ------------------------------  -----------------------------------------
+
 
 function Catalogue() {
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("q") ?? "";
 
+    //! ------------------------------ MOCK -----------------------------------------
+
     const results = useMemo(() => filterByTitle(MOCK_ANIME, query), [query]);
+    //! ------------------------------  -----------------------------------------
 
     const handleSearch = (value: string) => {
         setSearchParams(value ? { q: value } : {});

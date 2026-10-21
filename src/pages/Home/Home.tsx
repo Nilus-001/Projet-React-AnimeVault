@@ -7,8 +7,8 @@ import LinearPresentationCardContainer, {
 import { MOCK_ANIME, MOCK_ANIME_BY_ID, MOCK_WATCH_PROGRESS } from "../../mocks/anime.ts";
 import type { Anime, WatchProgress } from "../../types/anime.ts";
 import { airsOn, getDisplayTitle, getTodayWeekday } from "../../utils/anime.ts";
+//! ------------------------------ MOCK -----------------------------------------
 
-/** Anime -> card data for the horizontal lists. */
 function toAnimeCard(anime: Anime, extra: Partial<AnimeCard> = {}): AnimeCard {
     return {
         id: anime.id,
@@ -22,13 +22,20 @@ function toAnimeCard(anime: Anime, extra: Partial<AnimeCard> = {}): AnimeCard {
 
 const airing = MOCK_ANIME.filter((anime) => anime.status === "Currently Airing");
 
-/** Top 3 airing shows by score. */
 const BANNER_SLIDES = [...airing].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 3);
+//! ------------------------------  -----------------------------------------
+
+
+
 
 function Home() {
     const [progress, setProgress] = useState<WatchProgress[]>(MOCK_WATCH_PROGRESS);
     const weekday = getTodayWeekday();
 
+
+
+
+    //! ------------------------------ MOCK -----------------------------------------
     const incrementEpisode = (animeId: number) => {
         setProgress((prev) =>
             prev.map((entry) => {
@@ -49,6 +56,8 @@ function Home() {
         .map((anime) =>
             toAnimeCard(anime, { badge: anime.broadcast.time ? `${anime.broadcast.time} JST` : undefined }),
         );
+    //! ------------------------------  -----------------------------------------
+
 
     return (
         <>
@@ -58,14 +67,14 @@ function Home() {
             <PageContainer className="flex flex-col gap-10 py-8">
                 <LinearPresentationCardContainer
                     title="Continue Watching"
-                    icon="▶" //!todo
+                    icon="▶"
                     items={continueWatching}
                     emptyMessage="You are not watching anything yet."
                     onAddEpisode={(anime) => incrementEpisode(anime.id)}
                 />
                 <LinearPresentationCardContainer
                     title={`Airing Today – ${weekday} Schedule`}
-                    icon="▶" //!todo
+                    icon="▶"
                     items={airingToday}
                     emptyMessage={`Nothing airing on ${weekday}.`}
                 />
