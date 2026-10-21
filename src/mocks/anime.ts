@@ -1,10 +1,5 @@
 import type { Anime, AnimeBroadcast, NamedRef, WatchProgress } from "../types/anime.ts";
 
-/**
- * Mock data used while the UI skeleton is being built.
- * Will be replaced by Jikan (MyAnimeList) API calls.
- */
-
 const poster = (n: number) => `https://picsum.photos/seed/anivault-${n}/450/636`;
 
 const broadcast = (day: string, time: string): AnimeBroadcast => ({
@@ -16,7 +11,6 @@ const broadcast = (day: string, time: string): AnimeBroadcast => ({
 
 const NO_BROADCAST: AnimeBroadcast = { day: null, time: null, timezone: null, string: null };
 
-/** MyAnimeList genre ids (useful later for the `genres=` API filter). */
 const GENRE_IDS: Record<string, number> = {
     Action: 1,
     Adventure: 2,
@@ -33,7 +27,6 @@ const GENRE_IDS: Record<string, number> = {
     "Award Winning": 46,
 };
 
-/** Fake studio ids: stable per name, not real MAL ids. */
 const studioIds = new Map<string, number>();
 const studioRef = (name: string): NamedRef => {
     if (!studioIds.has(name)) studioIds.set(name, 1000 + studioIds.size);
@@ -41,7 +34,6 @@ const studioRef = (name: string): NamedRef => {
 };
 const genreRef = (name: string): NamedRef => ({ id: GENRE_IDS[name] ?? 0, name });
 
-/** Mocks only spell out what the UI shows; the rest gets neutral defaults. */
 type MockAnime = Omit<Anime, "studios" | "genres" | keyof typeof MOCK_DEFAULTS | "url" | "airing"> &
     Partial<Pick<Anime, keyof typeof MOCK_DEFAULTS | "airing">> & {
         studios: string[];
@@ -85,7 +77,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(1),
         synopsis:
             "Decades after the ten-year quest of the hero party, elven mage Frieren embarks on a quiet pilgrimage across human territories.",
-        type: "TV",
         episodes: 28,
         status: "Currently Airing",
         score: 9.3,
@@ -102,7 +93,6 @@ const MOCK_INPUT: MockAnime[] = [
         titleJapanese: "俺だけレベルアップな件",
         image: poster(2),
         synopsis: "The weakest hunter gains the ability to level up and grows stronger without limits.",
-        type: "TV",
         episodes: 12,
         status: "Currently Airing",
         score: 8.25,
@@ -119,7 +109,6 @@ const MOCK_INPUT: MockAnime[] = [
         titleJapanese: "ダンダダン",
         image: poster(3),
         synopsis: "A skeptic of ghosts and a believer in aliens team up after both are proven right.",
-        type: "TV",
         episodes: 12,
         status: "Currently Airing",
         score: 8.55,
@@ -137,7 +126,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(4),
         synopsis:
             "Maomao keeps solving poisonings and palace intrigues while the mystery around Jinshi deepens.",
-        type: "TV",
         episodes: 24,
         status: "Finished Airing",
         score: 8.9,
@@ -155,7 +143,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(5),
         synopsis:
             "A kaiju cleaner who once dreamed of joining the Defense Force suddenly gains the power to turn into a kaiju himself.",
-        type: "TV",
         episodes: 12,
         status: "Finished Airing",
         score: 8.3,
@@ -173,7 +160,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(6),
         synopsis:
             "A doctor is reborn as the child of the idol he adored, and sets out to uncover the dark side of the entertainment industry.",
-        type: "TV",
         episodes: 11,
         status: "Finished Airing",
         score: 8.6,
@@ -191,7 +177,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(7),
         synopsis:
             "After swallowing a cursed finger, Yuji Itadori joins a secret school of sorcerers fighting curses.",
-        type: "TV",
         episodes: 24,
         status: "Finished Airing",
         score: 8.6,
@@ -209,7 +194,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(8),
         synopsis:
             "A spy, an assassin and a telepath pretend to be a family — none of them knowing the others' secrets.",
-        type: "TV",
         episodes: 12,
         status: "Currently Airing",
         score: 8.5,
@@ -227,7 +211,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(9),
         synopsis:
             "Three hundred strikers are locked in a facility to forge the world's most egotistical forward.",
-        type: "TV",
         episodes: 24,
         status: "Currently Airing",
         score: 8.2,
@@ -245,7 +228,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(10),
         synopsis:
             "Denji merges with his chainsaw devil dog Pochita and becomes a devil hunter for Public Safety.",
-        type: "TV",
         episodes: 12,
         status: "Currently Airing",
         score: 8.5,
@@ -263,7 +245,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(11),
         synopsis:
             "Yoshiki realises his best friend Hikaru has been replaced by something else — and chooses to stay by its side.",
-        type: "TV",
         episodes: 12,
         status: "Currently Airing",
         score: 8.2,
@@ -281,7 +262,6 @@ const MOCK_INPUT: MockAnime[] = [
         image: poster(12),
         synopsis:
             "Coco, a village girl, discovers that magic is drawn — and becomes the apprentice of the witch Qifrey.",
-        type: "TV",
         episodes: null,
         status: "Not yet aired",
         score: null,
@@ -299,7 +279,6 @@ export const MOCK_ANIME_BY_ID: ReadonlyMap<number, Anime> = new Map(
     MOCK_ANIME.map((anime) => [anime.id, anime]),
 );
 
-/** Mock "Continue Watching" list (only finished shows, so it never overlaps "Airing Today"). */
 export const MOCK_WATCH_PROGRESS: WatchProgress[] = [
     { animeId: 4, currentEpisode: 7 },
     { animeId: 7, currentEpisode: 15 },

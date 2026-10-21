@@ -28,7 +28,6 @@ export function airsOn(anime: Pick<Anime, "broadcast">, weekday: string): boolea
     return anime.broadcast.day?.toLowerCase().startsWith(weekday.toLowerCase()) ?? false;
 }
 
-/** [{ name: "OLM" }, { name: "TOHO" }] -> "OLM, TOHO". */
 export function joinNames(refs: NamedRef[], separator = ", "): string {
     return refs.map((ref) => ref.name).join(separator);
 }

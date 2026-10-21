@@ -47,30 +47,28 @@ export type ApiAnime = {
     mal_id: number;
     url: string;
     images: string;
-    trailer: string | null;
+    trailer: string;
     approved: boolean;
     titles: ApiTitle[];
     title: string;
-    title_english: string | null;
-    title_japanese: string | null;
+    title_english: string;
+    title_japanese: string;
     title_synonyms: string[];
-    type?: string | null;
-    source: string | null;
+    source: string;
     episodes: number | null;
     status: string;
     airing: boolean;
     aired: ApiAired;
-    duration: string | null;
-    rating: string | null;
-    score: number | null;
-    scored_by?: number | null;
-    rank: number | null;
-    popularity: number | null;
-    members: number | null;
-    favorites: number | null;
-    synopsis: string | null;
-    season: string | null;
-    year: number | null;
+    duration: string;
+    rating: string;
+    score: number;
+    rank: number;
+    popularity: number;
+    members: number;
+    favorites: number;
+    synopsis: string;
+    season: string;
+    year: number;
     broadcast: ApiBroadcast;
     producers: ApiEntityRef[];
     licensors: ApiEntityRef[];
@@ -88,22 +86,6 @@ export type ApiAnime = {
     streaming: ApiLink[];
 };
 
-export type ApiPagination = {
-    last_visible_page: number;
-    has_next_page: boolean;
-    current_page: number;
-    items: {
-        count: number;
-        total: number;
-        per_page: number;
-    };
-};
-
-export type ApiListResponse<T> = {
-    data: T[];
-    pagination?: ApiPagination;
-};
-
-export type ApiItemResponse<T> = {
-    data: T;
+export type ApiAnimeListResponse = {
+    data: ApiAnime[];
 };

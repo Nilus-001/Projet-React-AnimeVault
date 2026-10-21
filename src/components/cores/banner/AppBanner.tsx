@@ -3,7 +3,6 @@ import type { Anime } from "../../../types/anime.ts";
 import { formatScore, formatSeason, getDisplayTitle, joinNames } from "../../../utils/anime.ts";
 import PageContainer from "../container/PageContainer.tsx";
 
-/** A banner slide is a subset of the shared Anime type: any Anime can be passed directly. */
 export type BannerSlide = Pick<
     Anime,
     | "id"
@@ -38,7 +37,6 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
     const isPaused = isHovered || isFocused || isStopped;
 
     useEffect(() => {
-        // Nothing to rotate (also avoids `% 0` -> NaN when the list is empty).
         if (count <= 1 || isPaused) return;
         const id = setTimeout(() => setIndex((i) => (i + 1) % count), interval);
         return () => clearTimeout(id);
@@ -46,7 +44,6 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
 
     if (count === 0) return null;
 
-    // Stay in range if the slides list shrinks.
     const activeIndex = index % count;
     const current = slides[activeIndex];
     const season = formatSeason(current);
@@ -55,7 +52,6 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
         .join(" • ");
 
     const handleBlur = (e: FocusEvent<HTMLElement>) => {
-        // Only resume when focus actually leaves the carousel.
         if (!e.currentTarget.contains(e.relatedTarget)) setIsFocused(false);
     };
 

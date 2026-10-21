@@ -4,7 +4,7 @@ import { STATUS_META, formatScore, getDisplayTitle, joinNames } from "../../../u
 
 export type CatalogueAnime = Pick<
     Anime,
-    "id" | "title" | "titleEnglish" | "image" | "synopsis" | "studios" | "genres" | "status" | "score" | "type" | "episodes"
+    "id" | "title" | "titleEnglish" | "image" | "synopsis" | "studios" | "genres" | "status" | "score" | "episodes"
 >;
 
 type CatalogueCardProps = {
@@ -26,7 +26,7 @@ function CatalogueCard({ anime }: CatalogueCardProps) {
                         {joinNames(anime.studios) || "Unknown studio"}
                     </span>
                     <span className="shrink-0 font-semibold">
-                        {anime.type ?? "?"} • {anime.episodes ?? "?"} eps
+                        {anime.episodes ?? "?"} eps
                     </span>
                 </>
             }

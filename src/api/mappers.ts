@@ -1,31 +1,14 @@
-import type {
-    ApiAnime,
-    ApiEntityRef,
-    ApiListResponse,
-    ApiRelation,
-} from "../types/api.ts";
-import type {
-    Anime,
-    AnimeDetail,
-    AnimeRelation,
-    AnimeSeason,
-    AnimeStatus,
-    AnimeType,
-    NamedRef,
-    Paginated,
-} from "../types/anime.ts";
+import type { ApiAnime, ApiAnimeListResponse, ApiEntityRef, ApiRelation } from "../types/api.ts";
+import type { Anime, AnimeDetail, AnimeRelation, AnimeSeason, AnimeStatus, NamedRef } from "../types/anime.ts";
 
 const STATUSES: readonly AnimeStatus[] = ["Finished Airing", "Currently Airing", "Not yet aired"];
 const SEASONS: readonly AnimeSeason[] = ["winter", "spring", "summer", "fall"];
-const TYPES: readonly AnimeType[] = ["TV", "Movie", "OVA", "ONA", "Special", "TV Special", "Music", "CM", "PV"];
 
 function oneOf<T extends string>(value: string | null | undefined, allowed: readonly T[]): T | null {
     return value != null && (allowed as readonly string[]).includes(value) ? (value as T) : null;
 }
 
-function toStatus(api: ApiAnime): AnimeStatus {
-    return oneOf(api.status, STATUSES) ?? (api.airing ? "Currently Airing" : "Finished Airing");
-}
+const orNull = <T>(value: T | null | undefined): T | null => (value === "" || value == null ? null : value);
 
 const toRef = (ref: ApiEntityRef): NamedRef => ({ id: ref.mal_id, name: ref.name });
 const toRefs = (refs: ApiEntityRef[] | null | undefined): NamedRef[] => (refs ?? []).map(toRef);
@@ -41,21 +24,20 @@ export function toAnime(api: ApiAnime): Anime {
         url: api.url,
 
         title: api.title,
-        titleEnglish: api.title_english,
-        titleJapanese: api.title_japanese,
+        titleEnglish: orNull(api.title_english),
+        titleJapanese: orNull(api.title_japanese),
         synonyms: api.title_synonyms ?? [],
 
         image: api.images,
-        trailer: api.trailer,
-        synopsis: api.synopsis,
+        trailer: orNull(api.trailer),
+        synopsis: orNull(api.synopsis),
 
-        type: oneOf(api.type, TYPES),
-        source: api.source,
-        episodes: api.episodes,
-        duration: api.duration,
-        rating: api.rating,
+        source: orNull(api.source),
+        episodes: api.episodes ?? null,
+        duration: orNull(api.duration),
+        rating: orNull(api.rating),
 
-        status: toStatus(api),
+        status: oneOf(api.status, STATUSES) ?? (api.airing ? "Currently Airing" : "Finished Airing"),
         airing: api.airing,
         aired: {
             from: api.aired?.from ?? null,
@@ -63,7 +45,7 @@ export function toAnime(api: ApiAnime): Anime {
             label: api.aired?.string ?? null,
         },
         season: oneOf(api.season?.toLowerCase(), SEASONS),
-        year: api.year,
+        year: api.year ?? null,
         broadcast: {
             day: api.broadcast?.day ?? null,
             time: api.broadcast?.time ?? null,
@@ -71,11 +53,11 @@ export function toAnime(api: ApiAnime): Anime {
             string: api.broadcast?.string ?? null,
         },
 
-        score: api.score,
-        rank: api.rank,
-        popularity: api.popularity,
-        members: api.members,
-        favorites: api.favorites,
+        score: api.score ?? null,
+        rank: api.rank ?? null,
+        popularity: api.popularity ?? null,
+        members: api.members ?? null,
+        favorites: api.favorites ?? null,
 
         studios: toRefs(api.studios),
         producers: toRefs(api.producers),
@@ -99,15 +81,6 @@ export function toAnimeDetail(api: ApiAnime): AnimeDetail {
     };
 }
 
-export function toPaginatedAnime(res: ApiListResponse<ApiAnime>): Paginated<Anime> {
-    const items = res.data.map(toAnime);
-    const p = res.pagination;
-    return {
-        items,
-        page: p?.current_page ?? 1,
-        lastPage: p?.last_visible_page ?? 1,
-        hasNextPage: p?.has_next_page ?? false,
-        total: p?.items.total ?? items.length,
-        perPage: p?.items.per_page ?? items.length,
-    };
+export function toAnimeList(res: ApiAnimeListResponse): Anime[] {
+    return res.data.map(toAnime);
 }
