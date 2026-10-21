@@ -11,7 +11,6 @@ type AppNavBarProps = {
     orientation?: "horizontal" | "vertical";
     className?: string;
     id?: string;
-    /** Called when a link is clicked (used to close the mobile menu). */
     onNavigate?: () => void;
 };
 

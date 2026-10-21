@@ -15,7 +15,6 @@ async function fetchUrl(url: string) {
         console.error(err);
         return null;
     }
-
 }
 
 export async function searchAnimeByName(query: string) {

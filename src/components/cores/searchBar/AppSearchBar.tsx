@@ -42,15 +42,9 @@ function AppSearchBar({
     buttonLabel = "Search",
 }: AppSearchBarProps) {
     const [query, setQuery] = useState(defaultValue);
-    const [prevDefaultValue, setPrevDefaultValue] = useState(defaultValue);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // Keep the input in sync when the value comes from outside (URL change).
-    // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
-    if (defaultValue !== prevDefaultValue) {
-        setPrevDefaultValue(defaultValue);
-        setQuery(defaultValue);
-    }
+
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -78,7 +72,7 @@ function AppSearchBar({
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder={placeholder}
                     aria-label="Search anime"
-                    className="min-w-0 flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+                    className="min-w-0 flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
                 />
 
                 {query && (
