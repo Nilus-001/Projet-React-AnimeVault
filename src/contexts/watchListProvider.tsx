@@ -1,24 +1,41 @@
-﻿import {createContext, type ReactElement, useContext, useState} from "react";
+﻿import {createContext, type ReactNode, useCallback, useContext, useMemo, useState} from "react";
 import type {Anime} from "../types/anime.ts";
 
-const WatchListContext = createContext();
+type WatchListContextValue = {
+    watchList: Anime[];
+    addToWatchList: (anime: Anime) => void;
+    removeFromWatchList: (animeId: Anime["id"]) => void;
+    isInWatchList: (animeId: Anime["id"]) => boolean;
+};
 
-export function WatchListProvider({ children }: ReactElement ) {
+const WatchListContext = createContext<WatchListContextValue | null>(null);
+
+export function WatchListProvider({ children }: { children: ReactNode } ) {
     const [watchList, setWatchList] = useState<Anime[]>([]);
 
-    const addToWatchList = (anime:Anime) => {
-        setWatchList((prevWatchList : Anime[]):Anime[] => [...prevWatchList, anime]);
-    }
+    const addToWatchList = useCallback((anime:Anime) => {
+        setWatchList((prev) => (prev.some((item) => item.id === anime.id) ? prev : [...prev, anime]));
+    }, [])
 
-    const removeToWatchList = (anime : Anime) => {
-        setWatchList((prevWatchList: Anime[]):Anime[] => prevWatchList.filter((item : Anime) => item.id !== anime.id));
-    }
+    const removeFromWatchList = useCallback((animeId: Anime["id"]) => {
+        setWatchList((prev) => prev.filter((item) => item.id !== animeId));
+    }, [])
+
+    const isInWatchList =
+        useCallback((animeId: Anime["id"]) => watchList.some((item) => item.id === animeId),
+        [watchList],
+    );
+
+    const value = useMemo(
+        () => ({ watchList, addToWatchList, removeFromWatchList, isInWatchList }),
+        [watchList, addToWatchList, removeFromWatchList, isInWatchList],
+    );
 
     return (
-        <WatchListContext.Provider value={{ watchList, addToWatchList, removeToWatchList }}>
-    {children}
-    </WatchListContext.Provider>
-)
+        <WatchListContext.Provider value={value}>
+        {children}
+        </WatchListContext.Provider>
+    )
 }
 
 export function useWatchListContext(){
