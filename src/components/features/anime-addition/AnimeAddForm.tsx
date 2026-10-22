@@ -10,7 +10,7 @@ export type AnimeFormValues = {
     genre: string;
     status: AnimeStatus;
     episodes: string;
-    score: string;
+    score: number;
     image: string;
     synopsis: string;
 };
@@ -22,7 +22,7 @@ const INITIAL_VALUES: AnimeFormValues = {
     genre: "",
     status: "Finished Airing",
     episodes: "",
-    score: "",
+    score: 0.0,
     image: "",
     synopsis: "",
 };
@@ -46,7 +46,7 @@ function validate(values: AnimeFormValues): FormErrors {
     }
 
     const score = Number(values.score);
-    if (values.score !== "" && (Number.isNaN(score) || score < 0 || score > 10)) {
+    if (Number.isNaN(score) || score < 0 || score > 10) {
         errors.score = "Score must be a number between 0 and 10.";
     }
 
@@ -71,7 +71,11 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
     const [values, setValues] = useState<AnimeFormValues>(INITIAL_VALUES);
     const [errors, setErrors] = useState<FormErrors>({});
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >,
+    ) => {
         const { name, value } = e.target;
         setValues({ ...values, [name]: value });
         setErrors({ ...errors, [name]: undefined });
@@ -94,11 +98,17 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
             className="flex flex-col gap-5 rounded-2xl border border-white/5 bg-surface p-6 sm:p-8"
         >
             <p className="text-sm text-on-surface-variant">
-                Fields marked with <span className="text-rose-300">*</span> are required.
+                Fields marked with <span className="text-rose-300">*</span> are
+                required.
             </p>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <FormField id="title" label="Title" required error={errors.title}>
+                <FormField
+                    id="title"
+                    label="Title"
+                    required
+                    error={errors.title}
+                >
                     <input
                         id="title"
                         name="title"
@@ -110,7 +120,12 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
                     />
                 </FormField>
 
-                <FormField id="genre" label="Genre" required error={errors.genre}>
+                <FormField
+                    id="genre"
+                    label="Genre"
+                    required
+                    error={errors.genre}
+                >
                     <select
                         id="genre"
                         name="genre"
@@ -137,13 +152,24 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
                         disabled={isSubmitting}
                         className={fieldClass()}
                     >
-                        <option value="Finished Airing">{STATUS_META["Finished Airing"].label}</option>
-                        <option value="Currently Airing">{STATUS_META["Currently Airing"].label}</option>
-                        <option value="Not yet aired">{STATUS_META["Not yet aired"].label}</option>
+                        <option value="Finished Airing">
+                            {STATUS_META["Finished Airing"].label}
+                        </option>
+                        <option value="Currently Airing">
+                            {STATUS_META["Currently Airing"].label}
+                        </option>
+                        <option value="Not yet aired">
+                            {STATUS_META["Not yet aired"].label}
+                        </option>
                     </select>
                 </FormField>
 
-                <FormField id="episodes" label="Episodes" required error={errors.episodes}>
+                <FormField
+                    id="episodes"
+                    label="Episodes"
+                    required
+                    error={errors.episodes}
+                >
                     <input
                         id="episodes"
                         name="episodes"
@@ -157,7 +183,11 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
                     />
                 </FormField>
 
-                <FormField id="score" label="Score (0 to 10)" error={errors.score}>
+                <FormField
+                    id="score"
+                    label="Score (0 to 10)"
+                    error={errors.score}
+                >
                     <input
                         id="score"
                         name="score"
@@ -173,7 +203,12 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
                     />
                 </FormField>
 
-                <FormField id="image" label="Poster URL" required error={errors.image}>
+                <FormField
+                    id="image"
+                    label="Poster URL"
+                    required
+                    error={errors.image}
+                >
                     <input
                         id="image"
                         name="image"
@@ -187,7 +222,12 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
                 </FormField>
             </div>
 
-            <FormField id="synopsis" label="Synopsis" required error={errors.synopsis}>
+            <FormField
+                id="synopsis"
+                label="Synopsis"
+                required
+                error={errors.synopsis}
+            >
                 <textarea
                     id="synopsis"
                     name="synopsis"
@@ -201,7 +241,12 @@ function AnimeAddForm({ genres, isSubmitting, onSubmit }: AnimeAddFormProps) {
             </FormField>
 
             <div className="flex justify-end">
-                <AppButton type="submit" variant="primary" size="lg" disabled={isSubmitting}>
+                <AppButton
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    disabled={isSubmitting}
+                >
                     {isSubmitting && <AppSpinner />}
                     {isSubmitting ? "Adding…" : "Add anime"}
                 </AppButton>
