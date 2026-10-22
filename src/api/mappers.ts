@@ -147,8 +147,12 @@ export function toAnimeList(products: ApiProduct[]): Anime[] {
     return products.map(productToAnime);
 }
 
-export function toAnimePage(response: ApiProductList): Paginated<Anime> {
-    const perPage = response.limit || response.products.length || 1;
+export function toAnimePage(
+    response: ApiProductList,
+    requestedPerPage?: number,
+): Paginated<Anime> {
+    const perPage =
+        requestedPerPage || response.limit || response.products.length || 1;
     return {
         items: toAnimeList(response.products),
         page: Math.floor(response.skip / perPage) + 1,

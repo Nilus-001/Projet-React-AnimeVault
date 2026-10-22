@@ -107,7 +107,10 @@ export async function getCatalogue({
         path = `/products/category/${encodeURIComponent(genre)}`;
     }
 
-    return toAnimePage(await get<ApiProductList>(`${path}?${params}`));
+    return toAnimePage(
+        await get<ApiProductList>(`${path}?${params}`),
+        perPage,
+    );
 }
 
 export async function getAnimePage(
@@ -116,6 +119,7 @@ export async function getAnimePage(
 ): Promise<Paginated<Anime>> {
     return toAnimePage(
         await get<ApiProductList>(`/products?${pageQuery(page, perPage)}`),
+        perPage,
     );
 }
 
@@ -129,6 +133,7 @@ export async function searchAnimeByName(
         await get<ApiProductList>(
             `/products/search?q=${q}&${pageQuery(page, perPage)}`,
         ),
+        perPage,
     );
 }
 
@@ -138,7 +143,7 @@ export async function getAnimeByGenre(
     perPage = 20,
 ): Promise<Paginated<Anime>> {
     const path = `/products/category/${encodeURIComponent(slug)}?${pageQuery(page, perPage)}`;
-    return toAnimePage(await get<ApiProductList>(path));
+    return toAnimePage(await get<ApiProductList>(path), perPage);
 }
 
 export async function getAnimeById(id: number): Promise<AnimeDetail> {
