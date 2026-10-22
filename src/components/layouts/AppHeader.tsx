@@ -42,8 +42,6 @@ export default function AppHeader() {
                 <AppNavBar items={NAV_ITEMS} className="hidden lg:block" />
 
                 <div className="ml-auto flex items-center gap-1">
-                   
-
                     <AppIconButton
                         icon={isMenuOpen ? "close" : "menu"}
                         label={isMenuOpen ? "Close menu" : "Open menu"}
