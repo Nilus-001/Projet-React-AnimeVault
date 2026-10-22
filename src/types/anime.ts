@@ -85,11 +85,19 @@ export type Anime = {
     external: ExternalLink[];
 };
 
+export type Review = {
+    author: string;
+    score: number;
+    comment: string;
+    date: string;
+};
+
 export type AnimeDetail = Anime & {
     explicitGenres: NamedRef[];
     relations: AnimeRelation[];
     openings: string[];
     endings: string[];
+    reviews: Review[];
 };
 
 export type WatchProgress = {
