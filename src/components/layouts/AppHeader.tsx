@@ -9,6 +9,7 @@ import { focusRing } from "../../styles/ui.ts";
 const NAV_ITEMS: NavItem[] = [
     { key: "home", label: "Home", href: "/" },
     { key: "catalogue", label: "Catalogue", href: "/catalogue" },
+    { key: "add-anime", label: "Add anime", href: "/anime/new" },
 ];
 
 const MOBILE_NAV_ID = "mobile-navigation";

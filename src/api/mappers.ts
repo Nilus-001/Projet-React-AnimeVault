@@ -117,3 +117,95 @@ export function toAnimePage(response: ApiProductList): Paginated<Anime> {
         perPage,
     };
 }
+
+const AVAILABILITY_BY_STATUS: Record<AnimeStatus, ApiAvailabilityStatus> = {
+    "Finished Airing": "In Stock",
+    "Currently Airing": "Low Stock",
+    "Not yet aired": "Out of Stock",
+};
+
+const EMPTY_PRODUCT: Omit<ApiProduct, "id" | "title"> = {
+    description: "",
+    category: "",
+    price: 0,
+    discountPercentage: 0,
+    rating: 0,
+    stock: 0,
+    tags: [],
+    sku: "",
+    weight: 0,
+    dimensions: { width: 0, height: 0, depth: 0 },
+    warrantyInformation: "",
+    shippingInformation: "",
+    availabilityStatus: "In Stock",
+    reviews: [],
+    returnPolicy: "",
+    minimumOrderQuantity: 1,
+    meta: { createdAt: "", updatedAt: "", barcode: "", qrCode: "" },
+    images: [],
+    thumbnail: "",
+};
+
+function toSlug(value: string): string {
+    return value.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+function parseWeight(duration: string | null): number | null {
+    const match = duration?.match(/^(\d+(?:\.\d+)?)/);
+    return match ? Number(match[1]) : null;
+}
+
+function toApiReview(review: Review, original?: ApiReview): ApiReview {
+    return {
+        rating: review.score / 2,
+        comment: review.comment,
+        date: review.date,
+        reviewerName: review.author,
+        reviewerEmail: original?.reviewerEmail ?? "",
+    };
+}
+
+function toApiReviews(reviews: Review[], originals: ApiReview[] = []): ApiReview[] {
+    return reviews.map((review) =>
+        toApiReview(
+            review,
+            originals.find((item) => item.reviewerName === review.author && item.date === review.date),
+        ),
+    );
+}
+
+function toMinimumOrderQuantity(rating: string | null, original?: number): number {
+    const isTeen = rating?.startsWith("PG-13") ?? false;
+    if (original !== undefined && original >= 13 === isTeen) return original;
+    return isTeen ? 13 : 1;
+}
+
+export function toProduct(anime: Anime | AnimeDetail, base: Partial<ApiProduct> = {}): ApiProduct {
+    const meta = { ...EMPTY_PRODUCT.meta, ...base.meta };
+    const category = anime.genres[0]?.name ?? anime.source;
+
+    return {
+        ...EMPTY_PRODUCT,
+        ...base,
+        id: anime.id,
+        title: anime.title,
+        description: anime.synopsis ?? base.description ?? "",
+        category: category ? toSlug(category) : (base.category ?? ""),
+        rating: anime.score !== null ? anime.score / 2 : (base.rating ?? 0),
+        stock: anime.episodes ?? base.stock ?? 0,
+        tags: anime.synonyms.length > 0 ? anime.synonyms : (base.tags ?? []),
+        brand: anime.studios[0]?.name ?? base.brand,
+        sku: anime.titleJapanese ?? base.sku ?? "",
+        weight: parseWeight(anime.duration) ?? base.weight ?? 0,
+        availabilityStatus: AVAILABILITY_BY_STATUS[anime.status],
+        reviews: "reviews" in anime ? toApiReviews(anime.reviews, base.reviews) : (base.reviews ?? []),
+        minimumOrderQuantity: toMinimumOrderQuantity(anime.rating, base.minimumOrderQuantity),
+        meta: {
+            ...meta,
+            createdAt: anime.aired.from ?? meta.createdAt,
+            updatedAt: anime.aired.to ?? meta.updatedAt,
+        },
+        images: base.images?.length ? [anime.image, ...base.images.filter((img) => img !== anime.image)] : [anime.image],
+        thumbnail: base.thumbnail ?? anime.image,
+    };
+}

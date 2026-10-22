@@ -24,10 +24,41 @@
     --color-on-surface-variant: #9b9bb3;
 
     --shadow-glow: 0 0 24px rgb(192 193 255 / 0.25);
+
+    --scrollbar-size: 8px;
+    --scrollbar-track: #0f0f14;
+    --scrollbar-thumb: #3a3a4a;
+    --scrollbar-thumb-hover: #1b1c26;
 }
 
 @layer base {
     body {
         @apply bg-neutral font-sans text-on-surface antialiased;
+    }
+}
+
+/*--------------------------------------------- Scroll Bar -------------------------------------*/
+*::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
     }
 }

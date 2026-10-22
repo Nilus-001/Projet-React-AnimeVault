@@ -3,6 +3,7 @@ import Home from "./pages/Home/Home.tsx";
 import AppLayout from "./components/layouts/AppLayout.tsx";
 import Catalogue from "./pages/Catalogue/Catalogue.tsx";
 import AnimeDetail from "./pages/AnimeDetail/AnimeDetail.tsx";
+import AddAnime from "./pages/AddNewAnime/AddAnime.tsx";
 
 function App() {
     return (
@@ -10,6 +11,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/catalogue" element={<Catalogue />} />
+                <Route path="/anime/new" element={<AddAnime />} />
                 <Route path="/anime/:id" element={<AnimeDetail />} />
             </Routes>
         </AppLayout>
