@@ -39,3 +39,9 @@ export type ApiProductList = {
     skip: number;
     limit: number;
 };
+
+export type ApiCategory = {
+    slug: string;
+    name: string;
+    url: string;
+};

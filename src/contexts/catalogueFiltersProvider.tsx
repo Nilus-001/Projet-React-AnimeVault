@@ -1,4 +1,5 @@
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
+import type { AnimeSort } from "../types/anime.ts";
 import { type CatalogueFilters, DEFAULT_FILTERS, clearFilters } from "../utils/catalogueFilters.ts";
 
 type CatalogueFiltersState = {
@@ -7,8 +8,9 @@ type CatalogueFiltersState = {
 };
 
 type CatalogueFiltersContextValue = CatalogueFiltersState & {
-    setFilters: (next: CatalogueFilters) => void;
     setQuery: (query: string) => void;
+    setGenre: (genre: string | null) => void;
+    setSort: (sort: AnimeSort) => void;
     setPage: (page: number) => void;
     clearAllFilters: () => void;
     resetAll: () => void;
@@ -21,12 +23,23 @@ const CatalogueFiltersContext = createContext<CatalogueFiltersContextValue | nul
 export function CatalogueFiltersProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<CatalogueFiltersState>(INITIAL_STATE);
 
-    const setFilters = useCallback((next: CatalogueFilters) => {
-        setState({ filters: next, page: 1 });
+    const setQuery = useCallback((query: string) => {
+        const value = query.trim();
+        setState((prev) => ({
+            filters: { ...prev.filters, query: value, genre: value ? null : prev.filters.genre },
+            page: 1,
+        }));
     }, []);
 
-    const setQuery = useCallback((query: string) => {
-        setState((prev) => ({ filters: { ...prev.filters, query: query.trim() }, page: 1 }));
+    const setGenre = useCallback((genre: string | null) => {
+        setState((prev) => ({
+            filters: { ...prev.filters, genre, query: genre ? "" : prev.filters.query },
+            page: 1,
+        }));
+    }, []);
+
+    const setSort = useCallback((sort: AnimeSort) => {
+        setState((prev) => ({ filters: { ...prev.filters, sort }, page: 1 }));
     }, []);
 
     const setPage = useCallback((page: number) => {
@@ -42,8 +55,8 @@ export function CatalogueFiltersProvider({ children }: { children: ReactNode }) 
     }, []);
 
     const value = useMemo(
-        () => ({ ...state, setFilters, setQuery, setPage, clearAllFilters, resetAll }),
-        [state, setFilters, setQuery, setPage, clearAllFilters, resetAll],
+        () => ({ ...state, setQuery, setGenre, setSort, setPage, clearAllFilters, resetAll }),
+        [state, setQuery, setGenre, setSort, setPage, clearAllFilters, resetAll],
     );
 
     return <CatalogueFiltersContext.Provider value={value}>{children}</CatalogueFiltersContext.Provider>;

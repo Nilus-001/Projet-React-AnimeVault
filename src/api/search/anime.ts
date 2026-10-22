@@ -1,7 +1,7 @@
 import { API_URL } from "../config.ts";
 import { toAnimeDetail, toAnimeList, toAnimePage } from "../mappers.ts";
-import type { ApiProduct, ApiProductList } from "../../types/api.ts";
-import type { Anime, AnimeDetail, Paginated } from "../../types/anime.ts";
+import type { ApiCategory, ApiProduct, ApiProductList } from "../../types/api.ts";
+import type { Anime, AnimeDetail, AnimeSort, CatalogueQuery, Genre, Paginated } from "../../types/anime.ts";
 
 const MAX_RETRY = 3;
 
@@ -34,6 +34,13 @@ function pageQuery(page: number, perPage: number): string {
     return `limit=${perPage}&skip=${(page - 1) * perPage}`;
 }
 
+const SORT_PARAMS: Record<AnimeSort, { sortBy: string; order: "asc" | "desc" } | null> = {
+    default: null,
+    score: { sortBy: "rating", order: "desc" },
+    title: { sortBy: "title", order: "asc" },
+    popularity: { sortBy: "stock", order: "desc" },
+};
+
 let allAnimeCache: Promise<Anime[]> | null = null;
 
 export function getAllAnime(): Promise<Anime[]> {
@@ -44,6 +51,38 @@ export function getAllAnime(): Promise<Anime[]> {
             throw err;
         });
     return allAnimeCache;
+}
+
+let genresCache: Promise<Genre[]> | null = null;
+
+export function getGenres(): Promise<Genre[]> {
+    genresCache ??= get<ApiCategory[]>("/products/categories")
+        .then((categories) => categories.map(({ slug, name }) => ({ slug, name })))
+        .catch((err) => {
+            genresCache = null;
+            throw err;
+        });
+    return genresCache;
+}
+
+export async function getCatalogue({ query, genre, sort, page, perPage }: CatalogueQuery): Promise<Paginated<Anime>> {
+    const params = new URLSearchParams({ limit: String(perPage), skip: String((page - 1) * perPage) });
+
+    const sortParams = SORT_PARAMS[sort];
+    if (sortParams) {
+        params.set("sortBy", sortParams.sortBy);
+        params.set("order", sortParams.order);
+    }
+
+    let path = "/products";
+    if (query) {
+        path = "/products/search";
+        params.set("q", query);
+    } else if (genre) {
+        path = `/products/category/${encodeURIComponent(genre)}`;
+    }
+
+    return toAnimePage(await get<ApiProductList>(`${path}?${params}`));
 }
 
 export async function getAnimePage(page = 1, perPage = 20): Promise<Paginated<Anime>> {

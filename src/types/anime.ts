@@ -112,3 +112,18 @@ export type Paginated<T> = {
     total: number;
     perPage: number;
 };
+
+export type AnimeSort = "default" | "score" | "title" | "popularity";
+
+export type Genre = {
+    slug: string;
+    name: string;
+};
+
+export type CatalogueQuery = {
+    query: string;
+    genre: string | null;
+    sort: AnimeSort;
+    page: number;
+    perPage: number;
+};
