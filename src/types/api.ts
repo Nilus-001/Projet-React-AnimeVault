@@ -28,7 +28,12 @@ export type ApiProduct = {
     reviews: ApiReview[];
     returnPolicy: string;
     minimumOrderQuantity: number;
-    meta: { createdAt: string; updatedAt: string; barcode: string; qrCode: string };
+    meta: {
+        createdAt: string;
+        updatedAt: string;
+        barcode: string;
+        qrCode: string;
+    };
     images: string[];
     thumbnail: string;
 };

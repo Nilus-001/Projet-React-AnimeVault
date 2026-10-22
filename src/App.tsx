@@ -1,4 +1,4 @@
-import { Route, Routes} from "react-router";
+import { Route, Routes } from "react-router";
 import Home from "./pages/Home/Home.tsx";
 import AppLayout from "./components/layouts/AppLayout.tsx";
 import Catalogue from "./pages/Catalogue/Catalogue.tsx";
@@ -15,7 +15,7 @@ function App() {
                 <Route path="/anime/:id" element={<AnimeDetail />} />
             </Routes>
         </AppLayout>
-    )
+    );
 }
 
-export default App
+export default App;

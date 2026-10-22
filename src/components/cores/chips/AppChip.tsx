@@ -15,10 +15,22 @@ const VARIANTS: Record<ChipVariant, string> = {
     tag: "rounded-lg bg-surface px-3 py-1 font-semibold text-on-surface",
 };
 
-function AppChip({ children, variant = "subtle", dot = false, className = "" }: AppChipProps) {
+function AppChip({
+    children,
+    variant = "subtle",
+    dot = false,
+    className = "",
+}: AppChipProps) {
     return (
-        <span className={`inline-flex items-center gap-1.5 text-xs ${VARIANTS[variant]} ${className}`}>
-            {dot && <span aria-hidden className="size-1.5 rounded-full bg-current" />}
+        <span
+            className={`inline-flex items-center gap-1.5 text-xs ${VARIANTS[variant]} ${className}`}
+        >
+            {dot && (
+                <span
+                    aria-hidden
+                    className="size-1.5 rounded-full bg-current"
+                />
+            )}
             {children}
         </span>
     );

@@ -7,7 +7,8 @@ type AnimeActionsBarProps = {
 };
 
 function AnimeActionsBar({ animeId }: AnimeActionsBarProps) {
-    const { addToWatchList, removeFromWatchList, isInWatchList } = useWatchListContext();
+    const { addToWatchList, removeFromWatchList, isInWatchList } =
+        useWatchListContext();
 
     return (
         <CardContentContainer

@@ -9,7 +9,14 @@ type EmptyStateProps = {
     className?: string;
 };
 
-function EmptyState({ title, message, actions, size = "md", role, className = "" }: EmptyStateProps) {
+function EmptyState({
+    title,
+    message,
+    actions,
+    size = "md",
+    role,
+    className = "",
+}: EmptyStateProps) {
     return (
         <div
             role={role}
@@ -17,9 +24,17 @@ function EmptyState({ title, message, actions, size = "md", role, className = ""
                 size === "md" ? "py-16" : "py-8"
             } ${className}`}
         >
-            {title && <p className="text-lg font-bold text-on-surface">{title}</p>}
-            {message && <p className="text-sm text-on-surface-variant">{message}</p>}
-            {actions && <div className="mt-2 flex flex-wrap justify-center gap-2">{actions}</div>}
+            {title && (
+                <p className="text-lg font-bold text-on-surface">{title}</p>
+            )}
+            {message && (
+                <p className="text-sm text-on-surface-variant">{message}</p>
+            )}
+            {actions && (
+                <div className="mt-2 flex flex-wrap justify-center gap-2">
+                    {actions}
+                </div>
+            )}
         </div>
     );
 }

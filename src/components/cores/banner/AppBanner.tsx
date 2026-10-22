@@ -1,6 +1,10 @@
 import { type FocusEvent, useEffect, useState } from "react";
 import type { Anime } from "../../../types/anime.ts";
-import { formatSeason, getDisplayTitle, joinNames } from "../../../utils/anime.ts";
+import {
+    formatSeason,
+    getDisplayTitle,
+    joinNames,
+} from "../../../utils/anime.ts";
 import AppBadge from "../badges/AppBadge.tsx";
 import ScoreBadge from "../badges/ScoreBadge.tsx";
 import AppChipList from "../chips/AppChipList.tsx";
@@ -33,7 +37,10 @@ type AppBannerProps = {
 
 const BASE_INTERVAL = 6000;
 
-export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBannerProps) {
+export default function AppBanner({
+    slides,
+    interval = BASE_INTERVAL,
+}: AppBannerProps) {
     const [index, setIndex] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -94,7 +101,9 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
                         {season && <AppBadge variant="soft">{season}</AppBadge>}
                         <ScoreBadge score={current.score} variant="score" />
                         {current.studios.length > 0 && (
-                            <span className="text-on-surface/85">Studio {joinNames(current.studios)}</span>
+                            <span className="text-on-surface/85">
+                                Studio {joinNames(current.studios)}
+                            </span>
                         )}
                     </div>
 
@@ -102,22 +111,39 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
                         <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
                             {getDisplayTitle(current)}
                         </h2>
-                        {subtitle && <p className="text-sm font-semibold text-primary-soft">{subtitle}</p>}
+                        {subtitle && (
+                            <p className="text-sm font-semibold text-primary-soft">
+                                {subtitle}
+                            </p>
+                        )}
                     </div>
 
                     {current.synopsis && (
-                        <p className="line-clamp-3 text-base leading-relaxed text-on-surface/85">{current.synopsis}</p>
-                    )}
-
-                    <AppChipList items={current.genres.map((genre) => ({ key: genre.id, label: genre.name }))} />
-
-                    {current.status === "Currently Airing" && current.broadcast.string && (
-                        <p className="flex items-center gap-2 text-sm text-on-surface/85">
-                            <AppIcon name="clock" className="size-4 text-tertiary-soft" />
-                            Next episode:
-                            <span className="font-semibold text-primary-muted">{current.broadcast.string}</span>
+                        <p className="line-clamp-3 text-base leading-relaxed text-on-surface/85">
+                            {current.synopsis}
                         </p>
                     )}
+
+                    <AppChipList
+                        items={current.genres.map((genre) => ({
+                            key: genre.id,
+                            label: genre.name,
+                        }))}
+                    />
+
+                    {current.status === "Currently Airing" &&
+                        current.broadcast.string && (
+                            <p className="flex items-center gap-2 text-sm text-on-surface/85">
+                                <AppIcon
+                                    name="clock"
+                                    className="size-4 text-tertiary-soft"
+                                />
+                                Next episode:
+                                <span className="font-semibold text-primary-muted">
+                                    {current.broadcast.string}
+                                </span>
+                            </p>
+                        )}
                 </div>
             </PageContainer>
 
@@ -126,7 +152,11 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
                     <div className="flex items-center gap-2">
                         <AppIconButton
                             icon={isStopped ? "play" : "pause"}
-                            label={isStopped ? "Resume slideshow" : "Pause slideshow"}
+                            label={
+                                isStopped
+                                    ? "Resume slideshow"
+                                    : "Pause slideshow"
+                            }
                             onClick={() => setIsStopped((s) => !s)}
                             size="sm"
                         />
@@ -138,7 +168,9 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
                                 aria-label={`Show ${getDisplayTitle(s)}`}
                                 aria-current={i === activeIndex}
                                 className={`h-1.5 rounded-full transition-all ${focusRing} ${
-                                    i === activeIndex ? "w-8 bg-primary-soft" : "w-3 bg-white/20 hover:bg-white/40"
+                                    i === activeIndex
+                                        ? "w-8 bg-primary-soft"
+                                        : "w-3 bg-white/20 hover:bg-white/40"
                                 }`}
                             />
                         ))}

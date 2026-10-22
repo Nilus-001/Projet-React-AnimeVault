@@ -10,7 +10,11 @@ type AppPaginationProps = {
 
 type PageItem = number | "ellipsis-start" | "ellipsis-end";
 
-function getPageItems(page: number, lastPage: number, siblingCount: number): PageItem[] {
+function getPageItems(
+    page: number,
+    lastPage: number,
+    siblingCount: number,
+): PageItem[] {
     const totalSlots = siblingCount * 2 + 5;
     if (lastPage <= totalSlots) {
         return Array.from({ length: lastPage }, (_, i) => i + 1);
@@ -41,7 +45,13 @@ function getPageItems(page: number, lastPage: number, siblingCount: number): Pag
     return items;
 }
 
-function AppPagination({ page, lastPage, onPageChange, siblingCount = 1, className = "" }: AppPaginationProps) {
+function AppPagination({
+    page,
+    lastPage,
+    onPageChange,
+    siblingCount = 1,
+    className = "",
+}: AppPaginationProps) {
     if (lastPage <= 1) return null;
 
     const isFirst = page <= 1;
@@ -54,7 +64,10 @@ function AppPagination({ page, lastPage, onPageChange, siblingCount = 1, classNa
     };
 
     return (
-        <nav aria-label="Pagination" className={`flex justify-center ${className}`}>
+        <nav
+            aria-label="Pagination"
+            className={`flex justify-center ${className}`}
+        >
             <ul className="flex flex-wrap items-center justify-center gap-2">
                 <li>
                     <AppButton
@@ -74,14 +87,20 @@ function AppPagination({ page, lastPage, onPageChange, siblingCount = 1, classNa
                                 onClick={() => goTo(item)}
                                 variant={item === page ? "primary" : "surface"}
                                 aria-label={`Page ${item}`}
-                                aria-current={item === page ? "page" : undefined}
+                                aria-current={
+                                    item === page ? "page" : undefined
+                                }
                                 className="min-w-10 px-3"
                             >
                                 {item}
                             </AppButton>
                         </li>
                     ) : (
-                        <li key={item} aria-hidden className="flex h-10 min-w-6 items-end justify-center pb-2 text-on-surface-variant">
+                        <li
+                            key={item}
+                            aria-hidden
+                            className="flex h-10 min-w-6 items-end justify-center pb-2 text-on-surface-variant"
+                        >
                             …
                         </li>
                     ),

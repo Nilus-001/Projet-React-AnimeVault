@@ -13,7 +13,12 @@ type AppChipListProps = {
     className?: string;
 };
 
-function AppChipList({ items, variant, label, className = "" }: AppChipListProps) {
+function AppChipList({
+    items,
+    variant,
+    label,
+    className = "",
+}: AppChipListProps) {
     if (items.length === 0) return null;
     return (
         <ul aria-label={label} className={`flex flex-wrap gap-2 ${className}`}>

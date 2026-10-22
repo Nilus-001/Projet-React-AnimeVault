@@ -16,7 +16,8 @@ function AnimeSynopsis({ anime }: AnimeSynopsisProps) {
     useLayoutEffect(() => {
         const el = textRef.current;
         if (!el || expanded) return;
-        const check = () => setOverflowing(el.scrollHeight > el.clientHeight + 1);
+        const check = () =>
+            setOverflowing(el.scrollHeight > el.clientHeight + 1);
         check();
         const observer = new ResizeObserver(check);
         observer.observe(el);
@@ -56,7 +57,9 @@ function AnimeSynopsis({ anime }: AnimeSynopsisProps) {
                         )}
                     </>
                 ) : (
-                    <p className="text-base text-on-surface-variant">Aucun synopsis disponible.</p>
+                    <p className="text-base text-on-surface-variant">
+                        Aucun synopsis disponible.
+                    </p>
                 )
             }
         />

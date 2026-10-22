@@ -7,8 +7,16 @@ type FooterLink =
     | { label: string; href: string; external: true };
 
 const links: FooterLink[] = [
-    { label: "Discord Community", href: "https://discord.gg/your-invite", external: true },
-    { label: "Public API", href: "https://api.anivault.com/docs", external: true },
+    {
+        label: "Discord Community",
+        href: "https://discord.gg/your-invite",
+        external: true,
+    },
+    {
+        label: "Public API",
+        href: "https://api.anivault.com/docs",
+        external: true,
+    },
     { label: "Changelog", to: "/changelog" },
     { label: "Privacy & Terms", to: "/privacy" },
 ];
@@ -24,11 +32,14 @@ function AppFooter() {
                 <div>
                     <p className="mb-2 flex items-baseline gap-1.5 text-xl font-extrabold tracking-tight text-on-surface">
                         AnimeVault
-                        <span className="font-mono text-[11px] font-medium text-on-surface-variant">v2.4.0</span>
+                        <span className="font-mono text-[11px] font-medium text-on-surface-variant">
+                            v2.4.0
+                        </span>
                     </p>
                     <p className="max-w-105 text-sm leading-normal text-on-surface/85">
-                        The hyper-focused digital sanctum for anime analysts, collectors, and seasonal trackers.
-                        Curating archival motion art.
+                        The hyper-focused digital sanctum for anime analysts,
+                        collectors, and seasonal trackers. Curating archival
+                        motion art.
                     </p>
                 </div>
 
@@ -37,7 +48,12 @@ function AppFooter() {
                         {links.map((item) => (
                             <li key={item.label}>
                                 {item.external ? (
-                                    <a href={item.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                                    <a
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={linkClass}
+                                    >
                                         {item.label}
                                     </a>
                                 ) : (

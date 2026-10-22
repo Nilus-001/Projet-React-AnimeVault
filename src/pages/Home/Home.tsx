@@ -4,7 +4,10 @@ import PageContainer from "../../components/cores/container/PageContainer.tsx";
 import LinearPresentationCardContainer, {
     type AnimeCard,
 } from "../../components/cores/container/LinearPresentationCardContainer.tsx";
-import { ErrorState, LoadingState } from "../../components/cores/feedback/AsyncFeedback.tsx";
+import {
+    ErrorState,
+    LoadingState,
+} from "../../components/cores/feedback/AsyncFeedback.tsx";
 import { getAllAnime } from "../../api/search/anime.ts";
 import { useAsync } from "../../hooks/useAsync.ts";
 import type { Anime } from "../../types/anime.ts";
@@ -15,7 +18,10 @@ function toAnimeCard(anime: Anime, extra: Partial<AnimeCard> = {}): AnimeCard {
     return {
         id: anime.id,
         title: getDisplayTitle(anime),
-        subtitle: anime.title !== getDisplayTitle(anime) ? anime.title : (anime.titleJapanese ?? undefined),
+        subtitle:
+            anime.title !== getDisplayTitle(anime)
+                ? anime.title
+                : (anime.titleJapanese ?? undefined),
         image: anime.image,
         episodes: anime.episodes,
         ...extra,
@@ -27,22 +33,37 @@ function Home() {
     const { status, data, reload } = useAsync(getAllAnime, []);
     const { watchList, getEpisode, incrementEpisode } = useWatchListContext();
 
-    const animeById = useMemo(() => new Map((data ?? []).map((anime) => [anime.id, anime])), [data]);
-    const airing = useMemo(() => (data ?? []).filter((anime) => anime.airing), [data]);
+    const animeById = useMemo(
+        () => new Map((data ?? []).map((anime) => [anime.id, anime])),
+        [data],
+    );
+    const airing = useMemo(
+        () => (data ?? []).filter((anime) => anime.airing),
+        [data],
+    );
     const bannerSlides = useMemo(
-        () => [...airing].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 3),
+        () =>
+            [...airing]
+                .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+                .slice(0, 3),
         [airing],
     );
 
     const continueWatching = watchList.flatMap((animeId) => {
         const anime = animeById.get(animeId);
-        return anime ? [toAnimeCard(anime, { currentEpisode: getEpisode(animeId) })] : [];
+        return anime
+            ? [toAnimeCard(anime, { currentEpisode: getEpisode(animeId) })]
+            : [];
     });
 
     const airingToday = airing
         .filter((anime) => airsOn(anime, weekday))
         .map((anime) =>
-            toAnimeCard(anime, { badge: anime.broadcast.time ? `${anime.broadcast.time} JST` : undefined }),
+            toAnimeCard(anime, {
+                badge: anime.broadcast.time
+                    ? `${anime.broadcast.time} JST`
+                    : undefined,
+            }),
         );
 
     return (
@@ -59,7 +80,9 @@ function Home() {
 
             {status === "success" && (
                 <>
-                    {bannerSlides.length > 0 && <AppBanner slides={bannerSlides} />}
+                    {bannerSlides.length > 0 && (
+                        <AppBanner slides={bannerSlides} />
+                    )}
 
                     <PageContainer className="flex flex-col gap-10 py-8">
                         <LinearPresentationCardContainer
@@ -67,7 +90,9 @@ function Home() {
                             icon="▶"
                             items={continueWatching}
                             emptyMessage="Add anime to your watchlist to see them here."
-                            onAddEpisode={(anime) => incrementEpisode(anime.id, anime.episodes)}
+                            onAddEpisode={(anime) =>
+                                incrementEpisode(anime.id, anime.episodes)
+                            }
                         />
                         <LinearPresentationCardContainer
                             title={`Airing Today – ${weekday} Schedule`}

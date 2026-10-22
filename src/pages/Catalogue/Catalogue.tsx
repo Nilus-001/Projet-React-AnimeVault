@@ -5,7 +5,10 @@ import AppPagination from "../../components/cores/pagination/AppPagination.tsx";
 import PageContainer from "../../components/cores/container/PageContainer.tsx";
 import CatalogueResultGrid from "../../components/features/catalogue/CatalogueResultGrid.tsx";
 import CatalogueFilters from "../../components/features/catalogue/CatalogueFilters.tsx";
-import { ErrorState, LoadingState } from "../../components/cores/feedback/AsyncFeedback.tsx";
+import {
+    ErrorState,
+    LoadingState,
+} from "../../components/cores/feedback/AsyncFeedback.tsx";
 import EmptyState from "../../components/cores/feedback/EmptyState.tsx";
 import AppButton from "../../components/cores/buttons/AppButton.tsx";
 import { getCatalogue, getGenres } from "../../api/search/anime.ts";
@@ -17,7 +20,15 @@ const PER_PAGE = 9;
 const FILTERS_PANEL_ID = "catalogue-filters";
 
 function Catalogue() {
-    const { filters, page, setQuery, setGenre, setSort, setPage, clearAllFilters } = useCatalogueFilters();
+    const {
+        filters,
+        page,
+        setQuery,
+        setGenre,
+        setSort,
+        setPage,
+        clearAllFilters,
+    } = useCatalogueFilters();
     const [filtersOpen, setFiltersOpen] = useState(false);
 
     const genres = useAsync(getGenres, []);
@@ -27,7 +38,9 @@ function Catalogue() {
     );
 
     const activeCount = countActiveFilters(filters);
-    const genreName = genres.data?.find((genre) => genre.slug === filters.genre)?.name ?? filters.genre;
+    const genreName =
+        genres.data?.find((genre) => genre.slug === filters.genre)?.name ??
+        filters.genre;
     const total = catalogue.data?.total ?? 0;
     const items = catalogue.data?.items ?? [];
     const lastPage = catalogue.data?.lastPage ?? 1;
@@ -54,15 +67,27 @@ function Catalogue() {
                 }
                 actions={
                     <>
-                        {activeCount > 0 && <AppButton onClick={clearAllFilters}>Clear filters</AppButton>}
-                        {filters.query && <AppButton onClick={() => handleSearch("")}>Clear search</AppButton>}
+                        {activeCount > 0 && (
+                            <AppButton onClick={clearAllFilters}>
+                                Clear filters
+                            </AppButton>
+                        )}
+                        {filters.query && (
+                            <AppButton onClick={() => handleSearch("")}>
+                                Clear search
+                            </AppButton>
+                        )}
                     </>
                 }
             />
         ) : (
             <EmptyState
                 title="This page is empty"
-                actions={<AppButton onClick={() => handlePageChange(1)}>Back to first page</AppButton>}
+                actions={
+                    <AppButton onClick={() => handlePageChange(1)}>
+                        Back to first page
+                    </AppButton>
+                }
             />
         );
 
@@ -82,8 +107,13 @@ function Catalogue() {
             />
 
             <div className="flex flex-col gap-1">
-                <h1 className="text-3xl font-extrabold tracking-tight text-white">Catalogue</h1>
-                <p className="text-sm text-on-surface-variant" aria-live="polite">
+                <h1 className="text-3xl font-extrabold tracking-tight text-white">
+                    Catalogue
+                </h1>
+                <p
+                    className="text-sm text-on-surface-variant"
+                    aria-live="polite"
+                >
                     {catalogue.status === "success" && (
                         <>
                             {total} {total === 1 ? "result" : "results"}
@@ -94,7 +124,11 @@ function Catalogue() {
                 </p>
             </div>
 
-            <AppSearchBar defaultValue={filters.query} onSearch={handleSearch} onClear={() => handleSearch("")} />
+            <AppSearchBar
+                defaultValue={filters.query}
+                onSearch={handleSearch}
+                onClear={() => handleSearch("")}
+            />
 
             <AppButton
                 icon="filter"
@@ -124,11 +158,20 @@ function Catalogue() {
 
                 <div className="flex min-w-0 flex-col gap-6">
                     {catalogue.status === "loading" && <LoadingState />}
-                    {catalogue.status === "error" && <ErrorState onRetry={catalogue.reload} />}
+                    {catalogue.status === "error" && (
+                        <ErrorState onRetry={catalogue.reload} />
+                    )}
                     {catalogue.status === "success" && (
                         <>
-                            <CatalogueResultGrid items={items} emptyState={emptyState} />
-                            <AppPagination page={page} lastPage={lastPage} onPageChange={handlePageChange} />
+                            <CatalogueResultGrid
+                                items={items}
+                                emptyState={emptyState}
+                            />
+                            <AppPagination
+                                page={page}
+                                lastPage={lastPage}
+                                onPageChange={handlePageChange}
+                            />
                         </>
                     )}
                 </div>

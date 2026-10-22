@@ -8,7 +8,13 @@ type AppFilterChipProps = {
     className?: string;
 };
 
-function AppFilterChip({ label, selected, onClick, count, className = "" }: AppFilterChipProps) {
+function AppFilterChip({
+    label,
+    selected,
+    onClick,
+    count,
+    className = "",
+}: AppFilterChipProps) {
     return (
         <button
             type="button"
@@ -22,7 +28,15 @@ function AppFilterChip({ label, selected, onClick, count, className = "" }: AppF
         >
             {label}
             {count !== undefined && (
-                <span className={selected ? "text-on-primary-soft/70" : "text-on-surface-variant/70"}>{count}</span>
+                <span
+                    className={
+                        selected
+                            ? "text-on-primary-soft/70"
+                            : "text-on-surface-variant/70"
+                    }
+                >
+                    {count}
+                </span>
             )}
         </button>
     );

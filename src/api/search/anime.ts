@@ -1,7 +1,18 @@
 import { API_URL } from "../config.ts";
 import { toAnimeDetail, toAnimeList, toAnimePage } from "../mappers.ts";
-import type { ApiCategory, ApiProduct, ApiProductList } from "../../types/api.ts";
-import type { Anime, AnimeDetail, AnimeSort, CatalogueQuery, Genre, Paginated } from "../../types/anime.ts";
+import type {
+    ApiCategory,
+    ApiProduct,
+    ApiProductList,
+} from "../../types/api.ts";
+import type {
+    Anime,
+    AnimeDetail,
+    AnimeSort,
+    CatalogueQuery,
+    Genre,
+    Paginated,
+} from "../../types/anime.ts";
 
 const MAX_RETRY = 3;
 
@@ -34,7 +45,10 @@ function pageQuery(page: number, perPage: number): string {
     return `limit=${perPage}&skip=${(page - 1) * perPage}`;
 }
 
-const SORT_PARAMS: Record<AnimeSort, { sortBy: string; order: "asc" | "desc" } | null> = {
+const SORT_PARAMS: Record<
+    AnimeSort,
+    { sortBy: string; order: "asc" | "desc" } | null
+> = {
     default: null,
     score: { sortBy: "rating", order: "desc" },
     title: { sortBy: "title", order: "asc" },
@@ -57,7 +71,9 @@ let genresCache: Promise<Genre[]> | null = null;
 
 export function getGenres(): Promise<Genre[]> {
     genresCache ??= get<ApiCategory[]>("/products/categories")
-        .then((categories) => categories.map(({ slug, name }) => ({ slug, name })))
+        .then((categories) =>
+            categories.map(({ slug, name }) => ({ slug, name })),
+        )
         .catch((err) => {
             genresCache = null;
             throw err;
@@ -65,8 +81,17 @@ export function getGenres(): Promise<Genre[]> {
     return genresCache;
 }
 
-export async function getCatalogue({ query, genre, sort, page, perPage }: CatalogueQuery): Promise<Paginated<Anime>> {
-    const params = new URLSearchParams({ limit: String(perPage), skip: String((page - 1) * perPage) });
+export async function getCatalogue({
+    query,
+    genre,
+    sort,
+    page,
+    perPage,
+}: CatalogueQuery): Promise<Paginated<Anime>> {
+    const params = new URLSearchParams({
+        limit: String(perPage),
+        skip: String((page - 1) * perPage),
+    });
 
     const sortParams = SORT_PARAMS[sort];
     if (sortParams) {
@@ -85,16 +110,33 @@ export async function getCatalogue({ query, genre, sort, page, perPage }: Catalo
     return toAnimePage(await get<ApiProductList>(`${path}?${params}`));
 }
 
-export async function getAnimePage(page = 1, perPage = 20): Promise<Paginated<Anime>> {
-    return toAnimePage(await get<ApiProductList>(`/products?${pageQuery(page, perPage)}`));
+export async function getAnimePage(
+    page = 1,
+    perPage = 20,
+): Promise<Paginated<Anime>> {
+    return toAnimePage(
+        await get<ApiProductList>(`/products?${pageQuery(page, perPage)}`),
+    );
 }
 
-export async function searchAnimeByName(query: string, page = 1, perPage = 20): Promise<Paginated<Anime>> {
+export async function searchAnimeByName(
+    query: string,
+    page = 1,
+    perPage = 20,
+): Promise<Paginated<Anime>> {
     const q = encodeURIComponent(query.trim());
-    return toAnimePage(await get<ApiProductList>(`/products/search?q=${q}&${pageQuery(page, perPage)}`));
+    return toAnimePage(
+        await get<ApiProductList>(
+            `/products/search?q=${q}&${pageQuery(page, perPage)}`,
+        ),
+    );
 }
 
-export async function getAnimeByGenre(slug: string, page = 1, perPage = 20): Promise<Paginated<Anime>> {
+export async function getAnimeByGenre(
+    slug: string,
+    page = 1,
+    perPage = 20,
+): Promise<Paginated<Anime>> {
     const path = `/products/category/${encodeURIComponent(slug)}?${pageQuery(page, perPage)}`;
     return toAnimePage(await get<ApiProductList>(path));
 }

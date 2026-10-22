@@ -8,7 +8,12 @@ type ScoreBadgeProps = {
     className?: string;
 };
 
-function ScoreBadge({ score, variant = "overlay", hideWhenEmpty = false, className = "" }: ScoreBadgeProps) {
+function ScoreBadge({
+    score,
+    variant = "overlay",
+    hideWhenEmpty = false,
+    className = "",
+}: ScoreBadgeProps) {
     if (score === null && hideWhenEmpty) return null;
     return (
         <AppBadge variant={variant} className={className}>

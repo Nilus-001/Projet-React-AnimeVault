@@ -24,10 +24,17 @@ export default function AppNavBar({
     id,
     onNavigate,
 }: AppNavBarProps) {
-    const layout = orientation === "horizontal" ? "items-center gap-2" : "flex-col items-stretch gap-1";
+    const layout =
+        orientation === "horizontal"
+            ? "items-center gap-2"
+            : "flex-col items-stretch gap-1";
 
     return (
-        <nav id={id} aria-label="Main navigation" className={`rounded-lg bg-surface px-3 py-2 ${className}`}>
+        <nav
+            id={id}
+            aria-label="Main navigation"
+            className={`rounded-lg bg-surface px-3 py-2 ${className}`}
+        >
             <ul className={`flex ${layout}`}>
                 {items.map((item) => (
                     <li key={item.key}>

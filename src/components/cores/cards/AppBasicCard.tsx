@@ -48,10 +48,14 @@ function AppBasicCard({
                         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/70 to-transparent"
                     />
                     {topLeft && (
-                        <div className="absolute left-2.5 top-2.5 flex items-center gap-2">{topLeft}</div>
+                        <div className="absolute left-2.5 top-2.5 flex items-center gap-2">
+                            {topLeft}
+                        </div>
                     )}
                     {bottomLeft && (
-                        <div className="absolute bottom-2.5 left-2.5 flex items-center gap-2">{bottomLeft}</div>
+                        <div className="absolute bottom-2.5 left-2.5 flex items-center gap-2">
+                            {bottomLeft}
+                        </div>
                     )}
                 </div>
 
@@ -61,13 +65,25 @@ function AppBasicCard({
                             {eyebrow}
                         </div>
                     )}
-                    <h3 className="truncate text-lg font-bold text-white">{title}</h3>
-                    {subtitle && <p className="truncate text-sm font-semibold text-on-surface-variant">{subtitle}</p>}
-                    {children && <div className="mt-1 flex flex-col gap-2">{children}</div>}
+                    <h3 className="truncate text-lg font-bold text-white">
+                        {title}
+                    </h3>
+                    {subtitle && (
+                        <p className="truncate text-sm font-semibold text-on-surface-variant">
+                            {subtitle}
+                        </p>
+                    )}
+                    {children && (
+                        <div className="mt-1 flex flex-col gap-2">
+                            {children}
+                        </div>
+                    )}
                 </div>
             </Link>
             {topRight && (
-                <div className="absolute right-2.5 top-2.5 z-10 flex items-center gap-2">{topRight}</div>
+                <div className="absolute right-2.5 top-2.5 z-10 flex items-center gap-2">
+                    {topRight}
+                </div>
             )}
         </article>
     );

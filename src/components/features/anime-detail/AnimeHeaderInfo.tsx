@@ -35,10 +35,28 @@ function AnimeHeaderInfo({ anime }: AnimeHeaderInfoProps) {
     const romaji = anime.title !== displayTitle ? anime.title : null;
 
     const overline = [
-        studios ? { key: "studios", text: studios, className: "font-bold uppercase tracking-widest text-primary-soft" } : null,
-        romaji ? { key: "romaji", text: romaji, className: "font-semibold text-on-surface-variant" } : null,
+        studios
+            ? {
+                  key: "studios",
+                  text: studios,
+                  className:
+                      "font-bold uppercase tracking-widest text-primary-soft",
+              }
+            : null,
+        romaji
+            ? {
+                  key: "romaji",
+                  text: romaji,
+                  className: "font-semibold text-on-surface-variant",
+              }
+            : null,
         anime.titleJapanese
-            ? { key: "japanese", text: anime.titleJapanese, className: "text-tertiary-soft", lang: "ja" }
+            ? {
+                  key: "japanese",
+                  text: anime.titleJapanese,
+                  className: "text-tertiary-soft",
+                  lang: "ja",
+              }
             : null,
     ].filter((item) => item !== null);
 
@@ -56,9 +74,15 @@ function AnimeHeaderInfo({ anime }: AnimeHeaderInfoProps) {
             {overline.length > 0 && (
                 <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm lg:justify-start">
                     {overline.map((item, i) => (
-                        <span key={item.key} className="flex items-center gap-2">
+                        <span
+                            key={item.key}
+                            className="flex items-center gap-2"
+                        >
                             {i > 0 && (
-                                <span aria-hidden className="text-on-surface-variant/50">
+                                <span
+                                    aria-hidden
+                                    className="text-on-surface-variant/50"
+                                >
                                     •
                                 </span>
                             )}
@@ -81,7 +105,11 @@ function AnimeHeaderInfo({ anime }: AnimeHeaderInfoProps) {
                     </li>
                 ))}
                 <li>
-                    <StatusBadge status={anime.status} label={STATUS_LABEL_FR[anime.status]} variant="pill" />
+                    <StatusBadge
+                        status={anime.status}
+                        label={STATUS_LABEL_FR[anime.status]}
+                        variant="pill"
+                    />
                 </li>
             </ul>
 
@@ -89,7 +117,10 @@ function AnimeHeaderInfo({ anime }: AnimeHeaderInfoProps) {
                 variant="tag"
                 label="Genres et thèmes"
                 className="justify-center lg:justify-start"
-                items={tags.map((tag) => ({ key: `${tag.id}-${tag.name}`, label: tag.name }))}
+                items={tags.map((tag) => ({
+                    key: `${tag.id}-${tag.name}`,
+                    label: tag.name,
+                }))}
             />
         </div>
     );

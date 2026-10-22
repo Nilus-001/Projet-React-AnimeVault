@@ -1,4 +1,5 @@
-export type AnimeStatus = "Finished Airing" | "Currently Airing" | "Not yet aired";
+export type AnimeStatus =
+    "Finished Airing" | "Currently Airing" | "Not yet aired";
 
 export type AnimeSeason = "winter" | "spring" | "summer" | "fall";
 

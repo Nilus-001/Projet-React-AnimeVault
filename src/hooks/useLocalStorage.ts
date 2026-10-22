@@ -1,9 +1,10 @@
-import {type Dispatch, type SetStateAction, useEffect, useState} from "react";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
 export function useLocalStorage<T>(
     key: string,
     initialValue: T,
-    isValid: (value: unknown) => value is T = (value): value is T => value !== undefined,
+    isValid: (value: unknown) => value is T = (value): value is T =>
+        value !== undefined,
 ): [T, Dispatch<SetStateAction<T>>] {
     const [value, setValue] = useState<T>(() => {
         try {

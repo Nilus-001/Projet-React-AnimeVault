@@ -43,14 +43,20 @@ function LinearPresentationCardContainer({
                         </span>
                     )}
                     <div className="flex flex-wrap items-center gap-3">
-                        <h2 className="text-xl font-bold text-on-surface">{title}</h2>
+                        <h2 className="text-xl font-bold text-on-surface">
+                            {title}
+                        </h2>
                         {subtitle && (
                             <AppChip variant="solid">{subtitle}</AppChip>
                         )}
                     </div>
                 </div>
 
-                {actions && <div className="flex shrink-0 items-center gap-3">{actions}</div>}
+                {actions && (
+                    <div className="flex shrink-0 items-center gap-3">
+                        {actions}
+                    </div>
+                )}
             </header>
 
             {items.length === 0 ? (
@@ -60,10 +66,16 @@ function LinearPresentationCardContainer({
                     {items.map((anime) => {
                         const { currentEpisode, episodes } = anime;
                         const hasProgress = currentEpisode !== undefined;
-                        const isComplete = hasProgress && episodes !== null && currentEpisode >= episodes;
+                        const isComplete =
+                            hasProgress &&
+                            episodes !== null &&
+                            currentEpisode >= episodes;
 
                         return (
-                            <li key={anime.id} className="w-56 shrink-0 snap-start">
+                            <li
+                                key={anime.id}
+                                className="w-56 shrink-0 snap-start"
+                            >
                                 <AppBasicCard
                                     img={anime.image}
                                     link={`/anime/${anime.id}`}
@@ -72,7 +84,8 @@ function LinearPresentationCardContainer({
                                     topLeft={
                                         hasProgress ? (
                                             <AppBadge>
-                                                Ep {anime.currentEpisode} / {anime.episodes ?? "?"}
+                                                Ep {anime.currentEpisode} /{" "}
+                                                {anime.episodes ?? "?"}
                                             </AppBadge>
                                         ) : anime.badge ? (
                                             <AppBadge>{anime.badge}</AppBadge>
@@ -84,7 +97,9 @@ function LinearPresentationCardContainer({
                                                 variant="primary"
                                                 size="sm"
                                                 icon="plus"
-                                                onClick={() => onAddEpisode(anime)}
+                                                onClick={() =>
+                                                    onAddEpisode(anime)
+                                                }
                                                 disabled={isComplete}
                                                 aria-label={`Mark one more episode of ${anime.title} as watched`}
                                                 className="h-7 px-2"

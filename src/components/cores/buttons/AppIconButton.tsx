@@ -2,7 +2,10 @@ import type { ComponentPropsWithoutRef } from "react";
 import AppIcon, { type IconName } from "../icons/AppIcon.tsx";
 import { focusRing } from "../../../styles/ui.ts";
 
-type AppIconButtonProps = Omit<ComponentPropsWithoutRef<"button">, "children" | "aria-label"> & {
+type AppIconButtonProps = Omit<
+    ComponentPropsWithoutRef<"button">,
+    "children" | "aria-label"
+> & {
     icon: IconName;
     label: string;
     variant?: "ghost" | "surface" | "primary";
@@ -39,7 +42,12 @@ function AppIconButton({
             className={`relative grid shrink-0 place-items-center transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${focusRing} ${SIZES[size].box} ${VARIANTS[variant]} ${className}`}
         >
             <AppIcon name={icon} className={SIZES[size].icon} />
-            {dot && <span aria-hidden className="absolute right-2 top-2 size-2 rounded-full bg-pink-400 ring-2 ring-neutral" />}
+            {dot && (
+                <span
+                    aria-hidden
+                    className="absolute right-2 top-2 size-2 rounded-full bg-pink-400 ring-2 ring-neutral"
+                />
+            )}
         </button>
     );
 }

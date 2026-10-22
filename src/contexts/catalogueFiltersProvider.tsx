@@ -1,6 +1,17 @@
-import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
+import {
+    createContext,
+    type ReactNode,
+    useCallback,
+    useContext,
+    useMemo,
+    useState,
+} from "react";
 import type { AnimeSort } from "../types/anime.ts";
-import { type CatalogueFilters, DEFAULT_FILTERS, clearFilters } from "../utils/catalogueFilters.ts";
+import {
+    type CatalogueFilters,
+    DEFAULT_FILTERS,
+    clearFilters,
+} from "../utils/catalogueFilters.ts";
 
 type CatalogueFiltersState = {
     filters: CatalogueFilters;
@@ -16,24 +27,40 @@ type CatalogueFiltersContextValue = CatalogueFiltersState & {
     resetAll: () => void;
 };
 
-const INITIAL_STATE: CatalogueFiltersState = { filters: DEFAULT_FILTERS, page: 1 };
+const INITIAL_STATE: CatalogueFiltersState = {
+    filters: DEFAULT_FILTERS,
+    page: 1,
+};
 
-const CatalogueFiltersContext = createContext<CatalogueFiltersContextValue | null>(null);
+const CatalogueFiltersContext =
+    createContext<CatalogueFiltersContextValue | null>(null);
 
-export function CatalogueFiltersProvider({ children }: { children: ReactNode }) {
+export function CatalogueFiltersProvider({
+    children,
+}: {
+    children: ReactNode;
+}) {
     const [state, setState] = useState<CatalogueFiltersState>(INITIAL_STATE);
 
     const setQuery = useCallback((query: string) => {
         const value = query.trim();
         setState((prev) => ({
-            filters: { ...prev.filters, query: value, genre: value ? null : prev.filters.genre },
+            filters: {
+                ...prev.filters,
+                query: value,
+                genre: value ? null : prev.filters.genre,
+            },
             page: 1,
         }));
     }, []);
 
     const setGenre = useCallback((genre: string | null) => {
         setState((prev) => ({
-            filters: { ...prev.filters, genre, query: genre ? "" : prev.filters.query },
+            filters: {
+                ...prev.filters,
+                genre,
+                query: genre ? "" : prev.filters.query,
+            },
             page: 1,
         }));
     }, []);
@@ -55,17 +82,39 @@ export function CatalogueFiltersProvider({ children }: { children: ReactNode }) 
     }, []);
 
     const value = useMemo(
-        () => ({ ...state, setQuery, setGenre, setSort, setPage, clearAllFilters, resetAll }),
-        [state, setQuery, setGenre, setSort, setPage, clearAllFilters, resetAll],
+        () => ({
+            ...state,
+            setQuery,
+            setGenre,
+            setSort,
+            setPage,
+            clearAllFilters,
+            resetAll,
+        }),
+        [
+            state,
+            setQuery,
+            setGenre,
+            setSort,
+            setPage,
+            clearAllFilters,
+            resetAll,
+        ],
     );
 
-    return <CatalogueFiltersContext.Provider value={value}>{children}</CatalogueFiltersContext.Provider>;
+    return (
+        <CatalogueFiltersContext.Provider value={value}>
+            {children}
+        </CatalogueFiltersContext.Provider>
+    );
 }
 
 export function useCatalogueFilters() {
     const context = useContext(CatalogueFiltersContext);
     if (!context) {
-        throw new Error("useCatalogueFilters must be used within a CatalogueFiltersProvider");
+        throw new Error(
+            "useCatalogueFilters must be used within a CatalogueFiltersProvider",
+        );
     }
     return context;
 }

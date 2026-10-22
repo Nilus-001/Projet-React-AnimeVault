@@ -7,7 +7,16 @@ import AppChipList from "../../cores/chips/AppChipList.tsx";
 
 export type CatalogueAnime = Pick<
     Anime,
-    "id" | "title" | "titleEnglish" | "image" | "synopsis" | "studios" | "genres" | "status" | "score" | "episodes"
+    | "id"
+    | "title"
+    | "titleEnglish"
+    | "image"
+    | "synopsis"
+    | "studios"
+    | "genres"
+    | "status"
+    | "score"
+    | "episodes"
 >;
 
 type CatalogueCardProps = {
@@ -33,9 +42,17 @@ function CatalogueCard({ anime }: CatalogueCardProps) {
             }
             topRight={<ScoreBadge score={anime.score} />}
         >
-            {anime.synopsis && <p className="line-clamp-2 text-sm text-on-surface-variant">{anime.synopsis}</p>}
+            {anime.synopsis && (
+                <p className="line-clamp-2 text-sm text-on-surface-variant">
+                    {anime.synopsis}
+                </p>
+            )}
 
-            <AppChipList items={anime.genres.slice(0, 3).map((genre) => ({ key: genre.id, label: genre.name }))} />
+            <AppChipList
+                items={anime.genres
+                    .slice(0, 3)
+                    .map((genre) => ({ key: genre.id, label: genre.name }))}
+            />
 
             <StatusBadge status={anime.status} className="text-right" />
         </AppBasicCard>

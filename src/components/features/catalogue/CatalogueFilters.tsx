@@ -3,7 +3,11 @@ import type { AnimeSort, Genre } from "../../../types/anime.ts";
 import AppButton from "../../cores/buttons/AppButton.tsx";
 import AppFilterChip from "../../cores/chips/AppFilterChip.tsx";
 import AppIcon from "../../cores/icons/AppIcon.tsx";
-import { type CatalogueFilters as Filters, SORT_OPTIONS, countActiveFilters } from "../../../utils/catalogueFilters.ts";
+import {
+    type CatalogueFilters as Filters,
+    SORT_OPTIONS,
+    countActiveFilters,
+} from "../../../utils/catalogueFilters.ts";
 
 type CatalogueFiltersProps = {
     id?: string;
@@ -15,7 +19,13 @@ type CatalogueFiltersProps = {
     className?: string;
 };
 
-function FilterSection({ title, children }: { title: string; children: ReactNode }) {
+function FilterSection({
+    title,
+    children,
+}: {
+    title: string;
+    children: ReactNode;
+}) {
     return (
         <fieldset className="flex flex-col gap-2.5">
             <legend className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
@@ -45,10 +55,18 @@ function CatalogueFilters({
         >
             <div className="flex items-center justify-between gap-2">
                 <h2 className="flex items-center gap-2 text-lg font-bold text-on-surface">
-                    <AppIcon name="filter" className="size-4 text-primary-soft" />
+                    <AppIcon
+                        name="filter"
+                        className="size-4 text-primary-soft"
+                    />
                     Filters
                 </h2>
-                <AppButton variant="link" onClick={onClear} disabled={activeCount === 0} className="text-xs">
+                <AppButton
+                    variant="link"
+                    onClick={onClear}
+                    disabled={activeCount === 0}
+                    className="text-xs"
+                >
                     Clear{activeCount > 0 && ` (${activeCount})`}
                 </AppButton>
             </div>
@@ -68,16 +86,28 @@ function CatalogueFilters({
 
             <FilterSection title="Genre">
                 {filters.query && (
-                    <p className="text-xs text-on-surface-variant">Choosing a genre clears the current search.</p>
+                    <p className="text-xs text-on-surface-variant">
+                        Choosing a genre clears the current search.
+                    </p>
                 )}
                 <div className="flex flex-wrap gap-1.5">
-                    <AppFilterChip label="All" selected={filters.genre === null} onClick={() => onGenreChange(null)} />
+                    <AppFilterChip
+                        label="All"
+                        selected={filters.genre === null}
+                        onClick={() => onGenreChange(null)}
+                    />
                     {genres.map((genre) => (
                         <AppFilterChip
                             key={genre.slug}
                             label={genre.name}
                             selected={filters.genre === genre.slug}
-                            onClick={() => onGenreChange(filters.genre === genre.slug ? null : genre.slug)}
+                            onClick={() =>
+                                onGenreChange(
+                                    filters.genre === genre.slug
+                                        ? null
+                                        : genre.slug,
+                                )
+                            }
                         />
                     ))}
                 </div>

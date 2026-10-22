@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import AppButton, { type ButtonSize } from "./AppButton.tsx";
 import type { IconName } from "../icons/AppIcon.tsx";
 
-export type ToggleButtonColor = "primary" | "secondary" | "tertiary" | "neutral";
+export type ToggleButtonColor =
+    "primary" | "secondary" | "tertiary" | "neutral";
 
 type AppToggleButtonProps = {
     condition: boolean;

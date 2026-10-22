@@ -3,7 +3,14 @@ import { Link, type LinkProps } from "react-router";
 import AppIcon, { type IconName } from "../icons/AppIcon.tsx";
 import { focusRing } from "../../../styles/ui.ts";
 
-export type ButtonVariant = "primary" | "secondary" | "tertiary" | "neutral" | "surface" | "ghost" | "link";
+export type ButtonVariant =
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "neutral"
+    | "surface"
+    | "ghost"
+    | "link";
 export type ButtonSize = "sm" | "md" | "lg";
 
 type BaseProps = {
@@ -16,14 +23,24 @@ type BaseProps = {
     children?: ReactNode;
 };
 
-type AsButton = BaseProps & Omit<ComponentPropsWithoutRef<"button">, keyof BaseProps> & { to?: undefined; href?: undefined };
-type AsLink = BaseProps & Omit<LinkProps, keyof BaseProps> & { href?: undefined };
-type AsAnchor = BaseProps & Omit<ComponentPropsWithoutRef<"a">, keyof BaseProps> & { href: string; to?: undefined };
+type AsButton = BaseProps &
+    Omit<ComponentPropsWithoutRef<"button">, keyof BaseProps> & {
+        to?: undefined;
+        href?: undefined;
+    };
+type AsLink = BaseProps &
+    Omit<LinkProps, keyof BaseProps> & { href?: undefined };
+type AsAnchor = BaseProps &
+    Omit<ComponentPropsWithoutRef<"a">, keyof BaseProps> & {
+        href: string;
+        to?: undefined;
+    };
 
 export type AppButtonProps = AsButton | AsLink | AsAnchor;
 
 const VARIANTS: Record<ButtonVariant, string> = {
-    primary: "bg-primary-soft text-on-primary-soft shadow-glow hover:bg-primary-soft/90",
+    primary:
+        "bg-primary-soft text-on-primary-soft shadow-glow hover:bg-primary-soft/90",
     secondary: "bg-secondary-soft text-secondary hover:bg-secondary-soft/90",
     tertiary: "bg-tertiary-soft text-neutral hover:bg-tertiary-soft/90",
     neutral: "bg-on-surface text-neutral hover:bg-on-surface/90",
@@ -65,7 +82,16 @@ export function buttonClasses({
 }
 
 function AppButton(props: AppButtonProps) {
-    const { variant, size = "md", icon, iconRight, fullWidth, className, children, ...rest } = props;
+    const {
+        variant,
+        size = "md",
+        icon,
+        iconRight,
+        fullWidth,
+        className,
+        children,
+        ...rest
+    } = props;
     const classes = buttonClasses({ variant, size, fullWidth, className });
     const iconClass = ICON_SIZES[size];
 
@@ -79,7 +105,10 @@ function AppButton(props: AppButtonProps) {
 
     if (rest.to !== undefined) {
         return (
-            <Link {...(rest as Omit<AsLink, keyof BaseProps>)} className={classes}>
+            <Link
+                {...(rest as Omit<AsLink, keyof BaseProps>)}
+                className={classes}
+            >
                 {content}
             </Link>
         );
@@ -100,7 +129,10 @@ function AppButton(props: AppButtonProps) {
         );
     }
 
-    const { type = "button", ...button } = rest as Omit<AsButton, keyof BaseProps>;
+    const { type = "button", ...button } = rest as Omit<
+        AsButton,
+        keyof BaseProps
+    >;
     return (
         <button type={type} {...button} className={classes}>
             {content}

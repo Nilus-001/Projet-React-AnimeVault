@@ -9,19 +9,34 @@ type StatusBadgeProps = {
     className?: string;
 };
 
-function StatusBadge({ status, label, variant = "text", className = "" }: StatusBadgeProps) {
+function StatusBadge({
+    status,
+    label,
+    variant = "text",
+    className = "",
+}: StatusBadgeProps) {
     const meta = STATUS_META[status];
     const text = label ?? meta.label;
 
     if (variant === "pill") {
         return (
-            <AppChip variant="solid" dot className={`${meta.className} ${className}`}>
+            <AppChip
+                variant="solid"
+                dot
+                className={`${meta.className} ${className}`}
+            >
                 {text}
             </AppChip>
         );
     }
 
-    return <span className={`text-xs font-semibold ${meta.className} ${className}`}>{text}</span>;
+    return (
+        <span
+            className={`text-xs font-semibold ${meta.className} ${className}`}
+        >
+            {text}
+        </span>
+    );
 }
 
 export default StatusBadge;

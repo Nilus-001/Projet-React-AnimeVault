@@ -11,9 +11,15 @@ function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
                 {items.map((item, i) => {
                     const isLast = i === items.length - 1;
                     return (
-                        <li key={`${i}-${item.label}`} className="flex items-center gap-2">
+                        <li
+                            key={`${i}-${item.label}`}
+                            className="flex items-center gap-2"
+                        >
                             {isLast || !item.to ? (
-                                <span aria-current={isLast ? "page" : undefined} className="font-bold text-on-surface">
+                                <span
+                                    aria-current={isLast ? "page" : undefined}
+                                    className="font-bold text-on-surface"
+                                >
                                     {item.label}
                                 </span>
                             ) : (
@@ -24,7 +30,13 @@ function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
                                     {item.label}
                                 </Link>
                             )}
-                            {!isLast && <AppIcon name="chevron-right" className="size-3 text-on-surface-variant/70" strokeWidth={2.5} />}
+                            {!isLast && (
+                                <AppIcon
+                                    name="chevron-right"
+                                    className="size-3 text-on-surface-variant/70"
+                                    strokeWidth={2.5}
+                                />
+                            )}
                         </li>
                     );
                 })}

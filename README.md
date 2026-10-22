@@ -25,12 +25,12 @@ The app runs on <http://localhost:5173>.
 
 ## Scripts
 
-| Script            | Description                                      |
-| ----------------- | ------------------------------------------------ |
-| `npm run dev`     | Start the Vite dev server with HMR               |
-| `npm run build`   | Type-check (`tsc -b`) and build for production   |
-| `npm run preview` | Serve the production build locally               |
-| `npm run lint`    | Lint the project with Oxlint                     |
+| Script            | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `npm run dev`     | Start the Vite dev server with HMR             |
+| `npm run build`   | Type-check (`tsc -b`) and build for production |
+| `npm run preview` | Serve the production build locally             |
+| `npm run lint`    | Lint the project with Oxlint                   |
 
 ## Project structure
 
@@ -77,9 +77,9 @@ src/
 
 ## Routes
 
-| Path         | Page                                    |
-| ------------ | --------------------------------------- |
+| Path         | Page                                                    |
+| ------------ | ------------------------------------------------------- |
 | `/`          | Home — featured banner, continue watching, airing today |
-| `/catalogue` | Catalogue — search by title (`?q=`)     |
+| `/catalogue` | Catalogue — search by title (`?q=`)                     |
 
 `/seasonal`, `/vault`, `/anime/:id`, `/changelog` and `/privacy` are linked in the UI but not implemented yet.

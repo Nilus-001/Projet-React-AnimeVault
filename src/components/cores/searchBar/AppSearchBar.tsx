@@ -53,10 +53,23 @@ function AppSearchBar({
                     aria-label="Search anime"
                     className="min-w-0 flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
                 />
-                {query && <AppIconButton icon="close" label="Clear search" size="sm" onClick={handleClear} />}
+                {query && (
+                    <AppIconButton
+                        icon="close"
+                        label="Clear search"
+                        size="sm"
+                        onClick={handleClear}
+                    />
+                )}
             </div>
 
-            <AppButton type="submit" variant="primary" size="lg" icon="search" aria-label={buttonLabel}>
+            <AppButton
+                type="submit"
+                variant="primary"
+                size="lg"
+                icon="search"
+                aria-label={buttonLabel}
+            >
                 <span className="hidden sm:inline">{buttonLabel}</span>
             </AppButton>
         </form>
