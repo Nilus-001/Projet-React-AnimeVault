@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router";
 import PageContainer from "../../components/cores/container/PageContainer.tsx";
+import { ErrorState, LoadingState } from "../../components/cores/feedback/AsyncFeedback.tsx";
 import AnimeHero from "../../components/features/anime-detail/AnimeHero.tsx";
 import AnimeSynopsis from "../../components/features/anime-detail/AnimeSynopsis.tsx";
-import { MOCK_ANIME_BY_ID } from "../../mocks/anime.ts";
+import AnimeActionsBar from "../../components/features/anime-detail/AnimeActionsBar.tsx";
+import { ApiError, getAnimeById } from "../../api/search/anime.ts";
+import { useAsync } from "../../hooks/useAsync.ts";
 
 function AnimeNotFound() {
     return (
@@ -23,19 +26,36 @@ function AnimeNotFound() {
 function AnimeDetail() {
     const { id } = useParams();
     const animeId = Number(id);
-    const anime = Number.isInteger(animeId) ? MOCK_ANIME_BY_ID.get(animeId) : undefined;
+    const validId = Number.isInteger(animeId) && animeId > 0;
+
+    const { status, data: anime, error, reload } = useAsync(
+        () => (validId ? getAnimeById(animeId) : Promise.resolve(null)),
+        [animeId, validId],
+    );
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [animeId]);
+
+    if (status === "loading") return <PageContainer><LoadingState /></PageContainer>;
+
+    if (status === "error") {
+        if (error instanceof ApiError && error.status === 404) return <AnimeNotFound />;
+        return (
+            <PageContainer className="py-10">
+                <ErrorState onRetry={reload} />
+            </PageContainer>
+        );
+    }
 
     if (!anime) return <AnimeNotFound />;
 
     return (
         <>
             <AnimeHero anime={anime} />
-            <PageContainer className="py-10">
+            <PageContainer className="flex flex-col gap-6 py-10">
                 <AnimeSynopsis key={anime.id} anime={anime} />
+                <AnimeActionsBar animeId={anime.id} />
             </PageContainer>
         </>
     );

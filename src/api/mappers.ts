@@ -7,10 +7,9 @@ const STATUS_BY_AVAILABILITY: Record<ApiAvailabilityStatus, AnimeStatus> = {
     "Out of Stock": "Not yet aired",
 };
 
-const SEASON_BY_MONTH: AnimeSeason[] = [
-    "winter", "winter", "spring", "spring", "spring", "summer",
-    "summer", "summer", "fall", "fall", "fall", "winter",
-];
+const SEASONS: AnimeSeason[] = ["winter", "spring", "summer", "fall"];
+
+const WEEKDAYS = ["Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays", "Sundays"];
 
 function hashId(value: string): number {
     return [...value].reduce((acc, c) => (acc * 31 + c.charCodeAt(0)) >>> 0, 7);
@@ -29,9 +28,8 @@ function toStatus(availability: ApiAvailabilityStatus): AnimeStatus {
     return STATUS_BY_AVAILABILITY[availability] ?? "Finished Airing";
 }
 
-function toBroadcast(created: Date): Anime["broadcast"] {
-    if (Number.isNaN(created.getTime())) return { day: null, time: null, timezone: null, string: null };
-    const day = `${created.toLocaleDateString("en-US", { weekday: "long" })}s`;
+function toBroadcast(id: number): Anime["broadcast"] {
+    const day = WEEKDAYS[id % WEEKDAYS.length];
     return { day, time: "23:00", timezone: "Asia/Tokyo", string: `${day} at 23:00 (JST)` };
 }
 
@@ -72,9 +70,9 @@ export function toAnime(product: ApiProduct): Anime {
         status,
         airing: status === "Currently Airing",
         aired: { from: product.meta?.createdAt ?? null, to: product.meta?.updatedAt ?? null, label: null },
-        season: validDate ? SEASON_BY_MONTH[created.getMonth()] : null,
+        season: SEASONS[product.id % SEASONS.length],
         year: validDate ? created.getFullYear() : null,
-        broadcast: toBroadcast(created),
+        broadcast: toBroadcast(product.id),
 
         score: product.rating != null ? Math.round(product.rating * 200) / 100 : null,
         rank: null,
