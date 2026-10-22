@@ -69,14 +69,14 @@ function Catalogue() {
                         <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 px-4 py-16 text-center">
                             <p className="text-lg font-bold text-on-surface">No results</p>
                             <p className="text-sm text-on-surface-variant">
-                                No anime matches “{query}”. Try another title.
+                                {query ? `No anime matches “${query}”. Try another title.` : "This page is empty."}
                             </p>
                             <button
                                 type="button"
                                 onClick={() => handleSearch("")}
                                 className="mt-2 rounded-xl bg-surface-high px-4 py-2 text-sm font-semibold text-on-surface transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft"
                             >
-                                Clear search
+                                {query ? "Clear search" : "Back to first page"}
                             </button>
                         </div>
                     }

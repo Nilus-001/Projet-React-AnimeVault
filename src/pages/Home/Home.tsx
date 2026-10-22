@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import AppBanner from "../../components/cores/banner/AppBanner.tsx";
 import PageContainer from "../../components/cores/container/PageContainer.tsx";
 import LinearPresentationCardContainer, {
@@ -7,8 +7,8 @@ import LinearPresentationCardContainer, {
 import { ErrorState, LoadingState } from "../../components/cores/feedback/AsyncFeedback.tsx";
 import { getAllAnime } from "../../api/search/anime.ts";
 import { useAsync } from "../../hooks/useAsync.ts";
-import { MOCK_WATCH_PROGRESS } from "../../mocks/anime.ts";
-import type { Anime, WatchProgress } from "../../types/anime.ts";
+import type { Anime } from "../../types/anime.ts";
+import { useWatchListContext } from "../../contexts/watchListProvider.tsx";
 import { airsOn, getDisplayTitle, getTodayWeekday } from "../../utils/anime.ts";
 
 function toAnimeCard(anime: Anime, extra: Partial<AnimeCard> = {}): AnimeCard {
@@ -23,9 +23,9 @@ function toAnimeCard(anime: Anime, extra: Partial<AnimeCard> = {}): AnimeCard {
 }
 
 function Home() {
-    const [progress, setProgress] = useState<WatchProgress[]>(MOCK_WATCH_PROGRESS);
     const weekday = getTodayWeekday();
     const { status, data, reload } = useAsync(getAllAnime, []);
+    const { watchList, getEpisode, incrementEpisode } = useWatchListContext();
 
     const animeById = useMemo(() => new Map((data ?? []).map((anime) => [anime.id, anime])), [data]);
     const airing = useMemo(() => (data ?? []).filter((anime) => anime.airing), [data]);
@@ -34,19 +34,9 @@ function Home() {
         [airing],
     );
 
-    const incrementEpisode = (animeId: number) => {
-        setProgress((prev) =>
-            prev.map((entry) => {
-                if (entry.animeId !== animeId) return entry;
-                const total = animeById.get(animeId)?.episodes ?? Infinity;
-                return { ...entry, currentEpisode: Math.min(entry.currentEpisode + 1, total) };
-            }),
-        );
-    };
-
-    const continueWatching = progress.flatMap((entry) => {
-        const anime = animeById.get(entry.animeId);
-        return anime ? [toAnimeCard(anime, { currentEpisode: entry.currentEpisode })] : [];
+    const continueWatching = watchList.flatMap((animeId) => {
+        const anime = animeById.get(animeId);
+        return anime ? [toAnimeCard(anime, { currentEpisode: getEpisode(animeId) })] : [];
     });
 
     const airingToday = airing
@@ -76,8 +66,8 @@ function Home() {
                             title="Continue Watching"
                             icon="▶"
                             items={continueWatching}
-                            emptyMessage="You are not watching anything yet."
-                            onAddEpisode={(anime) => incrementEpisode(anime.id)}
+                            emptyMessage="Add anime to your watchlist to see them here."
+                            onAddEpisode={(anime) => incrementEpisode(anime.id, anime.episodes)}
                         />
                         <LinearPresentationCardContainer
                             title={`Airing Today – ${weekday} Schedule`}

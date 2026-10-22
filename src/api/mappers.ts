@@ -84,7 +84,7 @@ export function toAnime(product: ApiProduct): Anime {
         producers: [],
         licensors: [],
         genres: [toRef(category)],
-        themes: tags.map((tag) => toRef(capitalize(tag))),
+        themes: [...new Set(tags.map(capitalize))].filter((name) => name !== category).map(toRef),
         demographics: [],
 
         streaming: [],
