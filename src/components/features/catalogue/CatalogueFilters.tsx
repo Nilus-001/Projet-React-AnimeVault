@@ -1,6 +1,10 @@
 import { type ReactNode, useId, useState } from "react";
 import type { AnimeStatus } from "../../../types/anime.ts";
 import { STATUS_META } from "../../../utils/anime.ts";
+import AppButton from "../../cores/buttons/AppButton.tsx";
+import AppFilterChip from "../../cores/chips/AppFilterChip.tsx";
+import AppBadge from "../../cores/badges/AppBadge.tsx";
+import AppIcon from "../../cores/icons/AppIcon.tsx";
 import {
     type CatalogueFilters as Filters,
     type FacetOption,
@@ -25,25 +29,6 @@ type CatalogueFiltersProps = {
 
 const STUDIOS_PREVIEW = 8;
 
-const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft";
-
-function FilterIcon() {
-    return (
-        <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-4 text-primary-soft"
-        >
-            <path d="M4 5h16l-6 7.5V19l-4 1.5v-8L4 5Z" />
-        </svg>
-    );
-}
-
 function FilterSection({ title, children }: { title: string; children: ReactNode }) {
     return (
         <fieldset className="flex flex-col gap-2.5">
@@ -52,36 +37,6 @@ function FilterSection({ title, children }: { title: string; children: ReactNode
             </legend>
             {children}
         </fieldset>
-    );
-}
-
-function Chip({
-    label,
-    count,
-    selected,
-    onClick,
-}: {
-    label: string;
-    count?: number;
-    selected: boolean;
-    onClick: () => void;
-}) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            aria-pressed={selected}
-            className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition-colors ${focusRing} ${
-                selected
-                    ? "bg-primary-soft text-on-primary-soft"
-                    : "bg-surface-high text-on-surface-variant hover:bg-white/10 hover:text-on-surface"
-            }`}
-        >
-            {label}
-            {count !== undefined && (
-                <span className={selected ? "text-on-primary-soft/70" : "text-on-surface-variant/70"}>{count}</span>
-            )}
-        </button>
     );
 }
 
@@ -115,17 +70,17 @@ function CatalogueFilters({
         >
             <div className="flex items-center justify-between gap-2">
                 <h2 className="flex items-center gap-2 text-lg font-bold text-on-surface">
-                    <FilterIcon />
+                    <AppIcon name="filter" className="size-4 text-primary-soft" />
                     Filters
                 </h2>
-                <button
-                    type="button"
+                <AppButton
+                    variant="link"
                     onClick={() => onChange(clearFilters(filters))}
                     disabled={activeCount === 0}
-                    className={`rounded text-xs font-semibold text-on-surface-variant transition-colors hover:text-primary-soft disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-on-surface-variant ${focusRing}`}
+                    className="text-xs"
                 >
                     Clear{activeCount > 0 && ` (${activeCount})`}
-                </button>
+                </AppButton>
             </div>
 
             <FilterSection title="Status">
@@ -162,9 +117,7 @@ function CatalogueFilters({
                     <label htmlFor={scoreId} className="text-sm text-on-surface-variant">
                         Score
                     </label>
-                    <span className="rounded-md bg-tertiary-soft/15 px-2 py-0.5 text-xs font-bold text-tertiary-soft">
-                        {filters.minScore > SCORE_MIN ? `★ ${filters.minScore.toFixed(1)}+` : "Any"}
-                    </span>
+                    <AppBadge variant="score">{filters.minScore > SCORE_MIN ? `★ ${filters.minScore.toFixed(1)}+` : "Any"}</AppBadge>
                 </div>
                 <input
                     id={scoreId}
@@ -187,7 +140,7 @@ function CatalogueFilters({
             <FilterSection title="Genres">
                 <div className="flex flex-wrap gap-1.5">
                     {genres.map((genre) => (
-                        <Chip
+                        <AppFilterChip
                             key={genre.name}
                             label={genre.name}
                             selected={filters.genres.includes(genre.name)}
@@ -201,7 +154,7 @@ function CatalogueFilters({
                 <FilterSection title="Studios">
                     <div className="flex flex-wrap gap-1.5">
                         {visibleStudios.map((studio) => (
-                            <Chip
+                            <AppFilterChip
                                 key={studio.name}
                                 label={studio.name}
                                 count={studio.count}
@@ -211,14 +164,14 @@ function CatalogueFilters({
                         ))}
                     </div>
                     {studios.length > STUDIOS_PREVIEW && (
-                        <button
-                            type="button"
+                        <AppButton
+                            variant="link"
                             onClick={() => setShowAllStudios((value) => !value)}
                             aria-expanded={showAllStudios}
-                            className={`self-start rounded text-xs font-semibold text-primary-soft transition-colors hover:text-white ${focusRing}`}
+                            className="self-start text-xs"
                         >
                             {showAllStudios ? "Show less" : `Show all (${studios.length})`}
-                        </button>
+                        </AppButton>
                     )}
                 </FilterSection>
             )}

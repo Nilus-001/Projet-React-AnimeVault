@@ -1,6 +1,7 @@
 import { useId, useLayoutEffect, useRef, useState } from "react";
 import type { Anime } from "../../../types/anime.ts";
 import CardContentContainer from "../../cores/container/CardContentContainer.tsx";
+import AppButton from "../../cores/buttons/AppButton.tsx";
 
 type AnimeSynopsisProps = {
     anime: Pick<Anime, "synopsis" | "source">;
@@ -43,15 +44,15 @@ function AnimeSynopsis({ anime }: AnimeSynopsisProps) {
                             {anime.synopsis}
                         </p>
                         {overflowing && (
-                            <button
-                                type="button"
+                            <AppButton
+                                variant="link"
                                 onClick={() => setExpanded((value) => !value)}
                                 aria-expanded={expanded}
                                 aria-controls={textId}
-                                className="self-start rounded text-sm font-semibold text-primary-soft transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft"
+                                className="self-start"
                             >
                                 {expanded ? "Réduire" : "Lire la suite"}
-                            </button>
+                            </AppButton>
                         )}
                     </>
                 ) : (

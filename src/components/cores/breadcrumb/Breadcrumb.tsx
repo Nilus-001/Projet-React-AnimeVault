@@ -1,23 +1,8 @@
 import { Link } from "react-router";
+import AppIcon from "../icons/AppIcon.tsx";
+import { focusRing } from "../../../styles/ui.ts";
 
 export type BreadcrumbItem = { label: string; to?: string };
-
-function Chevron() {
-    return (
-        <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-3 text-on-surface-variant/70"
-        >
-            <path d="m9 6 6 6-6 6" />
-        </svg>
-    );
-}
 
 function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
     return (
@@ -34,12 +19,12 @@ function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
                             ) : (
                                 <Link
                                     to={item.to}
-                                    className="text-on-surface-variant transition-colors hover:text-on-surface focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                    className={`rounded text-on-surface-variant transition-colors hover:text-on-surface ${focusRing}`}
                                 >
                                     {item.label}
                                 </Link>
                             )}
-                            {!isLast && <Chevron />}
+                            {!isLast && <AppIcon name="chevron-right" className="size-3 text-on-surface-variant/70" strokeWidth={2.5} />}
                         </li>
                     );
                 })}

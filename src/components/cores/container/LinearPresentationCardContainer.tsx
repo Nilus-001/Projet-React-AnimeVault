@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import AppBasicCard from "../cards/AppBasicCard.tsx";
 import type { Anime } from "../../../types/anime.ts";
-
-/** Card data derived from the shared Anime type. */
+import AppBadge from "../badges/AppBadge.tsx";
+import AppChip from "../chips/AppChip.tsx";
+import AppButton from "../buttons/AppButton.tsx";
+import EmptyState from "../feedback/EmptyState.tsx";
 export type AnimeCard = Pick<Anime, "id" | "title" | "image" | "episodes"> & {
     subtitle?: string;
-    /** When set, an "Ep x / y" badge and the "+1 ep" button are shown. */
     currentEpisode?: number;
-    /** Extra badge shown when there is no progress (e.g. broadcast time). */
     badge?: string;
 };
 
@@ -45,9 +45,7 @@ function LinearPresentationCardContainer({
                     <div className="flex flex-wrap items-center gap-3">
                         <h2 className="text-xl font-bold text-on-surface">{title}</h2>
                         {subtitle && (
-                            <span className="rounded-full bg-surface-high px-2.5 py-0.5 text-xs font-semibold text-on-surface-variant">
-                                {subtitle}
-                            </span>
+                            <AppChip variant="solid">{subtitle}</AppChip>
                         )}
                     </div>
                 </div>
@@ -56,9 +54,7 @@ function LinearPresentationCardContainer({
             </header>
 
             {items.length === 0 ? (
-                <p className="rounded-2xl border border-dashed border-white/10 px-4 py-8 text-center text-sm text-on-surface-variant">
-                    {emptyMessage}
-                </p>
+                <EmptyState size="sm" message={emptyMessage} />
             ) : (
                 <ul className="flex snap-x snap-mandatory flex-row gap-4 overflow-x-auto pb-2">
                     {items.map((anime) => {
@@ -75,26 +71,26 @@ function LinearPresentationCardContainer({
                                     subtitle={anime.subtitle}
                                     topLeft={
                                         hasProgress ? (
-                                            <span className="rounded bg-neutral/70 px-2 py-0.5 text-xs font-bold text-on-surface backdrop-blur-sm">
+                                            <AppBadge>
                                                 Ep {anime.currentEpisode} / {anime.episodes ?? "?"}
-                                            </span>
+                                            </AppBadge>
                                         ) : anime.badge ? (
-                                            <span className="rounded bg-neutral/70 px-2 py-0.5 text-xs font-bold text-on-surface backdrop-blur-sm">
-                                                {anime.badge}
-                                            </span>
+                                            <AppBadge>{anime.badge}</AppBadge>
                                         ) : undefined
                                     }
                                     topRight={
                                         onAddEpisode && hasProgress ? (
-                                            <button
-                                                type="button"
+                                            <AppButton
+                                                variant="primary"
+                                                size="sm"
+                                                icon="plus"
                                                 onClick={() => onAddEpisode(anime)}
                                                 disabled={isComplete}
                                                 aria-label={`Mark one more episode of ${anime.title} as watched`}
-                                                className="rounded-lg bg-primary-soft px-2 py-1 text-xs font-bold text-on-primary-soft shadow-glow transition-colors hover:bg-primary-soft/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft disabled:cursor-not-allowed disabled:opacity-50"
+                                                className="h-7 px-2"
                                             >
-                                                +1 ep
-                                            </button>
+                                                1 ep
+                                            </AppButton>
                                         ) : undefined
                                     }
                                 />

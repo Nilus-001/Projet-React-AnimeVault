@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import PageContainer from "../cores/container/PageContainer.tsx";
+import { focusRing } from "../../styles/ui.ts";
 
 type FooterLink =
     | { label: string; to: string; external?: false }
@@ -14,9 +15,7 @@ const links: FooterLink[] = [
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-const linkClass =
-    "whitespace-nowrap text-sm font-bold text-on-surface transition-colors hover:text-white " +
-    "focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-soft";
+const linkClass = `whitespace-nowrap rounded text-sm font-bold text-on-surface transition-colors hover:text-white ${focusRing}`;
 
 function AppFooter() {
     return (

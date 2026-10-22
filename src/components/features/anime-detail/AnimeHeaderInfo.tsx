@@ -1,13 +1,15 @@
 import type { Anime } from "../../../types/anime.ts";
 import {
     STATUS_LABEL_FR,
-    STATUS_META,
     formatAiredRange,
     formatEpisodes,
     formatRatingShort,
     getDisplayTitle,
     joinNames,
 } from "../../../utils/anime.ts";
+import AppChip from "../../cores/chips/AppChip.tsx";
+import AppChipList from "../../cores/chips/AppChipList.tsx";
+import StatusBadge from "../../cores/badges/StatusBadge.tsx";
 
 type AnimeHeaderInfoProps = {
     anime: Pick<
@@ -26,8 +28,6 @@ type AnimeHeaderInfoProps = {
         | "demographics"
     >;
 };
-
-const pillBase = "rounded-full bg-surface-high px-3 py-1 text-xs font-semibold";
 
 function AnimeHeaderInfo({ anime }: AnimeHeaderInfoProps) {
     const displayTitle = getDisplayTitle(anime);
@@ -50,7 +50,6 @@ function AnimeHeaderInfo({ anime }: AnimeHeaderInfoProps) {
     ].filter((pill): pill is string => Boolean(pill));
 
     const tags = [...anime.genres, ...anime.themes, ...anime.demographics];
-    const status = STATUS_META[anime.status];
 
     return (
         <div className="flex min-w-0 flex-1 flex-col gap-4 text-center lg:text-left">
@@ -77,28 +76,21 @@ function AnimeHeaderInfo({ anime }: AnimeHeaderInfoProps) {
 
             <ul className="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
                 {pills.map((pill) => (
-                    <li key={pill} className={`${pillBase} text-on-surface-variant`}>
-                        {pill}
+                    <li key={pill}>
+                        <AppChip variant="solid">{pill}</AppChip>
                     </li>
                 ))}
-                <li className={`flex items-center gap-1.5 ${pillBase} ${status.className}`}>
-                    <span aria-hidden className="size-1.5 rounded-full bg-current" />
-                    {STATUS_LABEL_FR[anime.status]}
+                <li>
+                    <StatusBadge status={anime.status} label={STATUS_LABEL_FR[anime.status]} variant="pill" />
                 </li>
             </ul>
 
-            {tags.length > 0 && (
-                <ul className="flex flex-wrap justify-center gap-2 lg:justify-start" aria-label="Genres et thèmes">
-                    {tags.map((tag) => (
-                        <li
-                            key={`${tag.id}-${tag.name}`}
-                            className="rounded-lg bg-surface px-3 py-1 text-xs font-semibold text-on-surface"
-                        >
-                            {tag.name}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <AppChipList
+                variant="tag"
+                label="Genres et thèmes"
+                className="justify-center lg:justify-start"
+                items={tags.map((tag) => ({ key: `${tag.id}-${tag.name}`, label: tag.name }))}
+            />
         </div>
     );
 }

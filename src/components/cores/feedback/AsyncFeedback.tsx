@@ -1,3 +1,6 @@
+import AppButton from "../buttons/AppButton.tsx";
+import EmptyState from "./EmptyState.tsx";
+
 type LoadingStateProps = {
     label?: string;
     className?: string;
@@ -18,20 +21,14 @@ type ErrorStateProps = {
     className?: string;
 };
 
-export function ErrorState({ message = "Impossible de charger les données.", onRetry, className = "" }: ErrorStateProps) {
+export function ErrorState({ message = "Impossible to load the data", onRetry, className = "" }: ErrorStateProps) {
     return (
-        <div role="alert" className={`flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 px-4 py-16 text-center ${className}`}>
-            <p className="text-lg font-bold text-on-surface">Erreur</p>
-            <p className="text-sm text-on-surface-variant">{message}</p>
-            {onRetry && (
-                <button
-                    type="button"
-                    onClick={onRetry}
-                    className="mt-2 rounded-xl bg-surface-high px-4 py-2 text-sm font-semibold text-on-surface transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft"
-                >
-                    Réessayer
-                </button>
-            )}
-        </div>
+        <EmptyState
+            role="alert"
+            title="Error"
+            message={message}
+            className={className}
+            actions={onRetry && <AppButton onClick={onRetry}>Retry</AppButton>}
+        />
     );
 }

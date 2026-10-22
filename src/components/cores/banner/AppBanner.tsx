@@ -1,6 +1,12 @@
 import { type FocusEvent, useEffect, useState } from "react";
 import type { Anime } from "../../../types/anime.ts";
-import { formatScore, formatSeason, getDisplayTitle, joinNames } from "../../../utils/anime.ts";
+import { formatSeason, getDisplayTitle, joinNames } from "../../../utils/anime.ts";
+import AppBadge from "../badges/AppBadge.tsx";
+import ScoreBadge from "../badges/ScoreBadge.tsx";
+import AppChipList from "../chips/AppChipList.tsx";
+import AppIcon from "../icons/AppIcon.tsx";
+import AppIconButton from "../buttons/AppIconButton.tsx";
+import { focusRing } from "../../../styles/ui.ts";
 import PageContainer from "../container/PageContainer.tsx";
 
 export type BannerSlide = Pick<
@@ -85,14 +91,10 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
                     aria-atomic="true"
                 >
                     <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold">
-                        {season && (
-                            <span className="rounded-md bg-white/10 px-2.5 py-1 text-slate-300">{season}</span>
-                        )}
-                        <span className="rounded-md bg-amber-400/20 px-2.5 py-1 text-amber-300">
-                            ★ {formatScore(current.score)}
-                        </span>
+                        {season && <AppBadge variant="soft">{season}</AppBadge>}
+                        <ScoreBadge score={current.score} variant="score" />
                         {current.studios.length > 0 && (
-                            <span className="text-slate-300">Studio {joinNames(current.studios)}</span>
+                            <span className="text-on-surface/85">Studio {joinNames(current.studios)}</span>
                         )}
                     </div>
 
@@ -100,40 +102,20 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
                         <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
                             {getDisplayTitle(current)}
                         </h2>
-                        {subtitle && <p className="text-sm font-semibold text-indigo-300">{subtitle}</p>}
+                        {subtitle && <p className="text-sm font-semibold text-primary-soft">{subtitle}</p>}
                     </div>
 
                     {current.synopsis && (
-                        <p className="line-clamp-3 text-base leading-relaxed text-slate-300">{current.synopsis}</p>
+                        <p className="line-clamp-3 text-base leading-relaxed text-on-surface/85">{current.synopsis}</p>
                     )}
 
-                    <ul className="flex flex-wrap items-center gap-2">
-                        {current.genres.map((genre) => (
-                            <li
-                                key={genre.id}
-                                className="rounded-md bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-300"
-                            >
-                                {genre.name}
-                            </li>
-                        ))}
-                    </ul>
+                    <AppChipList items={current.genres.map((genre) => ({ key: genre.id, label: genre.name }))} />
 
                     {current.status === "Currently Airing" && current.broadcast.string && (
-                        <p className="flex items-center gap-2 text-sm text-slate-300">
-                            <svg
-                                aria-hidden
-                                viewBox="0 0 24 24"
-                                className="h-4 w-4 text-amber-300"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                            >
-                                <circle cx="12" cy="12" r="9" />
-                                <path d="M12 7v5l3 2" />
-                            </svg>
+                        <p className="flex items-center gap-2 text-sm text-on-surface/85">
+                            <AppIcon name="clock" className="size-4 text-tertiary-soft" />
                             Next episode:
-                            <span className="font-semibold text-indigo-200">{current.broadcast.string}</span>
+                            <span className="font-semibold text-primary-muted">{current.broadcast.string}</span>
                         </p>
                     )}
                 </div>
@@ -142,16 +124,12 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
             {count > 1 && (
                 <PageContainer className="absolute inset-x-0 bottom-5">
                     <div className="flex items-center gap-2">
-                        <button
-                            type="button"
+                        <AppIconButton
+                            icon={isStopped ? "play" : "pause"}
+                            label={isStopped ? "Resume slideshow" : "Pause slideshow"}
                             onClick={() => setIsStopped((s) => !s)}
-                            aria-label={isStopped ? "Resume slideshow" : "Pause slideshow"}
-                            className="grid size-6 place-items-center rounded-full text-slate-300 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-soft/70"
-                        >
-                            <svg aria-hidden viewBox="0 0 24 24" className="size-3.5" fill="currentColor">
-                                {isStopped ? <path d="M8 5v14l11-7z" /> : <path d="M7 5h4v14H7zM13 5h4v14h-4z" />}
-                            </svg>
-                        </button>
+                            size="sm"
+                        />
                         {slides.map((s, i) => (
                             <button
                                 key={s.id}
@@ -159,8 +137,8 @@ export default function AppBanner({ slides, interval = BASE_INTERVAL }: AppBanne
                                 onClick={() => setIndex(i)}
                                 aria-label={`Show ${getDisplayTitle(s)}`}
                                 aria-current={i === activeIndex}
-                                className={`h-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-soft/70 ${
-                                    i === activeIndex ? "w-8 bg-indigo-300" : "w-3 bg-white/20 hover:bg-white/40"
+                                className={`h-1.5 rounded-full transition-all ${focusRing} ${
+                                    i === activeIndex ? "w-8 bg-primary-soft" : "w-3 bg-white/20 hover:bg-white/40"
                                 }`}
                             />
                         ))}

@@ -1,30 +1,7 @@
-import { type FormEvent, useRef, useState } from "react";
-
-type IconProps = { className?: string };
-
-const iconProps = {
-    xmlns: "http://www.w3.org/2000/svg",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-};
-
-const SearchIcon = ({ className }: IconProps) => (
-    <svg {...iconProps} className={className}>
-        <circle cx="11" cy="11" r="7" />
-        <path d="m20 20-3.5-3.5" />
-    </svg>
-);
-
-const CloseIcon = ({ className }: IconProps) => (
-    <svg {...iconProps} className={className}>
-        <path d="M18 6 6 18M6 6l12 12" />
-    </svg>
-);
+import { type FormEvent, useEffect, useRef, useState } from "react";
+import AppButton from "../buttons/AppButton.tsx";
+import AppIconButton from "../buttons/AppIconButton.tsx";
+import AppIcon from "../icons/AppIcon.tsx";
 
 type AppSearchBarProps = {
     onSearch: (query: string) => void;
@@ -44,7 +21,9 @@ function AppSearchBar({
     const [query, setQuery] = useState(defaultValue);
     const inputRef = useRef<HTMLInputElement>(null);
 
-
+    useEffect(() => {
+        setQuery(defaultValue);
+    }, [defaultValue]);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -64,7 +43,7 @@ function AppSearchBar({
             className="flex w-full items-center gap-2 rounded-2xl border border-white/5 bg-surface p-2"
         >
             <div className="flex h-12 min-w-0 flex-1 items-center gap-3 rounded-xl bg-neutral px-4 focus-within:ring-2 focus-within:ring-primary/60">
-                <SearchIcon className="size-4 shrink-0 text-primary-soft" />
+                <AppIcon name="search" className="size-4 text-primary-soft" />
                 <input
                     ref={inputRef}
                     type="search"
@@ -74,27 +53,12 @@ function AppSearchBar({
                     aria-label="Search anime"
                     className="min-w-0 flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none"
                 />
-
-                {query && (
-                    <button
-                        type="button"
-                        onClick={handleClear}
-                        aria-label="Clear search"
-                        className="shrink-0 rounded text-on-surface-variant transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-primary"
-                    >
-                        <CloseIcon className="size-4" />
-                    </button>
-                )}
+                {query && <AppIconButton icon="close" label="Clear search" size="sm" onClick={handleClear} />}
             </div>
 
-            <button
-                type="submit"
-                aria-label={buttonLabel}
-                className="flex h-12 shrink-0 items-center gap-2 rounded-xl bg-primary-soft px-5 text-sm font-semibold text-on-primary-soft shadow-glow transition-colors hover:bg-primary-soft/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft"
-            >
-                <SearchIcon className="size-4" />
+            <AppButton type="submit" variant="primary" size="lg" icon="search" aria-label={buttonLabel}>
                 <span className="hidden sm:inline">{buttonLabel}</span>
-            </button>
+            </AppButton>
         </form>
     );
 }

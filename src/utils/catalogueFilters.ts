@@ -19,42 +19,13 @@ export const SCORE_STEP = 0.5;
 
 export const FILTER_STATUSES: AnimeStatus[] = ["Currently Airing", "Finished Airing", "Not yet aired"];
 
-const STATUS_PARAM: Record<AnimeStatus, string> = {
-    "Currently Airing": "airing",
-    "Finished Airing": "finished",
-    "Not yet aired": "upcoming",
+export const DEFAULT_FILTERS: CatalogueFilters = {
+    query: "",
+    statuses: [],
+    genres: [],
+    studios: [],
+    minScore: SCORE_MIN,
 };
-
-function readList(params: URLSearchParams, key: string): string[] {
-    return (params.get(key) ?? "")
-        .split(",")
-        .map((value) => value.trim())
-        .filter(Boolean);
-}
-
-export function parseFilters(params: URLSearchParams): CatalogueFilters {
-    const statusValues = readList(params, "status");
-    const score = Number(params.get("score"));
-
-    return {
-        query: params.get("q") ?? "",
-        statuses: FILTER_STATUSES.filter((status) => statusValues.includes(STATUS_PARAM[status])),
-        genres: readList(params, "genres"),
-        studios: readList(params, "studios"),
-        minScore: Number.isFinite(score) && score > SCORE_MIN ? Math.min(score, SCORE_MAX) : SCORE_MIN,
-    };
-}
-
-export function filtersToParams(filters: CatalogueFilters): URLSearchParams {
-    const params = new URLSearchParams();
-    const query = filters.query.trim();
-    if (query) params.set("q", query);
-    if (filters.statuses.length > 0) params.set("status", filters.statuses.map((s) => STATUS_PARAM[s]).join(","));
-    if (filters.genres.length > 0) params.set("genres", filters.genres.join(","));
-    if (filters.studios.length > 0) params.set("studios", filters.studios.join(","));
-    if (filters.minScore > SCORE_MIN) params.set("score", String(filters.minScore));
-    return params;
-}
 
 export function countActiveFilters(filters: CatalogueFilters): number {
     return (
@@ -66,7 +37,7 @@ export function countActiveFilters(filters: CatalogueFilters): number {
 }
 
 export function clearFilters(filters: CatalogueFilters): CatalogueFilters {
-    return { query: filters.query, statuses: [], genres: [], studios: [], minScore: SCORE_MIN };
+    return { ...DEFAULT_FILTERS, query: filters.query };
 }
 
 export function toggleValue<T>(list: T[], value: T): T[] {

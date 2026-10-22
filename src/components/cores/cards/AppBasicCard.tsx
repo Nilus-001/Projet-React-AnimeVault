@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
+import { focusRing } from "../../../styles/ui.ts";
 
 type AppBasicCardProps = {
     img: string;
@@ -30,7 +31,7 @@ function AppBasicCard({
         <article className="group relative w-full overflow-hidden rounded-2xl border border-white/5 bg-surface text-on-surface">
             <Link
                 to={link}
-                className="flex flex-col rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-soft/70"
+                className={`flex flex-col rounded-2xl ${focusRing}`}
             >
                 <div
                     className={`relative overflow-hidden ${height === undefined ? "aspect-2/3" : ""}`}

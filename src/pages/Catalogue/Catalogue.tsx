@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { useSearchParams } from "react-router";
 import AppSearchBar from "../../components/cores/searchBar/AppSearchBar.tsx";
 import Breadcrumb from "../../components/cores/breadcrumb/Breadcrumb.tsx";
 import AppPagination from "../../components/cores/pagination/AppPagination.tsx";
@@ -7,32 +6,21 @@ import PageContainer from "../../components/cores/container/PageContainer.tsx";
 import CatalogueResultGrid from "../../components/features/catalogue/CatalogueResultGrid.tsx";
 import CatalogueFilters from "../../components/features/catalogue/CatalogueFilters.tsx";
 import { ErrorState, LoadingState } from "../../components/cores/feedback/AsyncFeedback.tsx";
+import EmptyState from "../../components/cores/feedback/EmptyState.tsx";
+import AppButton from "../../components/cores/buttons/AppButton.tsx";
 import { getAllAnime } from "../../api/search/anime.ts";
 import { useAsync } from "../../hooks/useAsync.ts";
-import {
-    type CatalogueFilters as Filters,
-    applyFilters,
-    buildFacets,
-    clearFilters,
-    countActiveFilters,
-    countByStatus,
-    filtersToParams,
-    parseFilters,
-} from "../../utils/catalogueFilters.ts";
+import { useCatalogueFilters } from "../../contexts/catalogueFiltersProvider.tsx";
+import { applyFilters, buildFacets, countActiveFilters, countByStatus } from "../../utils/catalogueFilters.ts";
 
 const PER_PAGE = 9;
 const FILTERS_PANEL_ID = "catalogue-filters";
 
-const secondaryButton =
-    "rounded-xl bg-surface-high px-4 py-2 text-sm font-semibold text-on-surface transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft";
-
 function Catalogue() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const { filters, page, setFilters, setQuery, setPage, clearAllFilters } = useCatalogueFilters();
     const [filtersOpen, setFiltersOpen] = useState(false);
     const { status, data, reload } = useAsync(getAllAnime, []);
 
-    const filters = useMemo(() => parseFilters(searchParams), [searchParams]);
-    const page = Math.max(1, Math.floor(Number(searchParams.get("page")) || 1));
     const activeCount = countActiveFilters(filters);
 
     const all = useMemo(() => data ?? [], [data]);
@@ -44,50 +32,38 @@ function Catalogue() {
     const lastPage = Math.max(1, Math.ceil(results.length / PER_PAGE));
     const pageItems = results.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-    const updateFilters = (next: Filters) => {
-        setSearchParams(filtersToParams(next), { replace: true });
-    };
-
     const handleSearch = (value: string) => {
-        setSearchParams(filtersToParams({ ...filters, query: value }));
+        setQuery(value);
     };
 
     const handlePageChange = (next: number) => {
-        const params = filtersToParams(filters);
-        if (next > 1) params.set("page", String(next));
-        setSearchParams(params);
+        setPage(next);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const emptyState =
         results.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 px-4 py-16 text-center">
-                <p className="text-lg font-bold text-on-surface">No results</p>
-                <p className="text-sm text-on-surface-variant">
-                    {filters.query
+            <EmptyState
+                title="No results"
+                message={
+                    filters.query
                         ? `No anime matches “${filters.query}”${activeCount > 0 ? " with these filters" : ""}.`
-                        : "No anime matches these filters."}
-                </p>
-                <div className="mt-2 flex flex-wrap justify-center gap-2">
-                    {activeCount > 0 && (
-                        <button type="button" onClick={() => updateFilters(clearFilters(filters))} className={secondaryButton}>
-                            Clear filters
-                        </button>
-                    )}
-                    {filters.query && (
-                        <button type="button" onClick={() => handleSearch("")} className={secondaryButton}>
-                            Clear search
-                        </button>
-                    )}
-                </div>
-            </div>
+                        : "No anime matches these filters."
+                }
+                actions={
+                    <>
+                        {activeCount > 0 && (
+                            <AppButton onClick={clearAllFilters}>Clear filters</AppButton>
+                        )}
+                        {filters.query && <AppButton onClick={() => handleSearch("")}>Clear search</AppButton>}
+                    </>
+                }
+            />
         ) : (
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 px-4 py-16 text-center">
-                <p className="text-lg font-bold text-on-surface">This page is empty</p>
-                <button type="button" onClick={() => handlePageChange(1)} className={secondaryButton}>
-                    Back to first page
-                </button>
-            </div>
+            <EmptyState
+                title="This page is empty"
+                actions={<AppButton onClick={() => handlePageChange(1)}>Back to first page</AppButton>}
+            />
         );
 
     return (
@@ -118,12 +94,12 @@ function Catalogue() {
 
             {status === "success" && (
                 <>
-                    <button
-                        type="button"
+                    <AppButton
+                        icon="filter"
                         onClick={() => setFiltersOpen((open) => !open)}
                         aria-expanded={filtersOpen}
                         aria-controls={FILTERS_PANEL_ID}
-                        className={`flex items-center justify-center gap-2 lg:hidden ${secondaryButton}`}
+                        className="lg:hidden"
                     >
                         {filtersOpen ? "Hide filters" : "Show filters"}
                         {activeCount > 0 && (
@@ -131,7 +107,7 @@ function Catalogue() {
                                 {activeCount}
                             </span>
                         )}
-                    </button>
+                    </AppButton>
 
                     <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
                         <CatalogueFilters
@@ -140,7 +116,7 @@ function Catalogue() {
                             genres={genreFacets}
                             studios={studioFacets}
                             statusCounts={statusCounts}
-                            onChange={updateFilters}
+                            onChange={setFilters}
                             className={`${filtersOpen ? "flex" : "hidden"} lg:sticky lg:top-6 lg:flex`}
                         />
 

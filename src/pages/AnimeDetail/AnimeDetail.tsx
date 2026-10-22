@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
+import AppButton from "../../components/cores/buttons/AppButton.tsx";
 import PageContainer from "../../components/cores/container/PageContainer.tsx";
 import { ErrorState, LoadingState } from "../../components/cores/feedback/AsyncFeedback.tsx";
 import AnimeHero from "../../components/features/anime-detail/AnimeHero.tsx";
@@ -13,12 +14,7 @@ function AnimeNotFound() {
         <PageContainer className="flex flex-col items-center gap-4 py-24 text-center">
             <h1 className="text-3xl font-extrabold tracking-tight text-white">Anime introuvable</h1>
             <p className="text-on-surface-variant">Cet anime n'existe pas ou n'est plus disponible.</p>
-            <Link
-                to="/catalogue"
-                className="rounded-xl bg-surface-high px-4 py-2 text-sm font-semibold text-on-surface transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-soft"
-            >
-                Retour au catalogue
-            </Link>
+            <AppButton to="/catalogue">Retour au catalogue</AppButton>
         </PageContainer>
     );
 }
