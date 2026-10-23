@@ -148,6 +148,4 @@ src/
 - **Fetching**: pages load data with `useAsync` and display loading / error states with `AsyncFeedback`.
 - **Layout width**: every section uses `PageContainer` so content is aligned across the site.
 - **Colors**: only use the tokens from `@theme` (`bg-surface`, `text-on-surface-variant`, …), no hard-coded hex values.
-- **Comments**: no comments in the code.
-- **Language**: the UI is in English.
 - **Formatting**: see `.editorconfig` (UTF-8, LF, 4 spaces).
